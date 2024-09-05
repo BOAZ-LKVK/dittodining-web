@@ -10,20 +10,20 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center w-full min-h-screen bg-white h-screen">
       <Header />
-      <div className="flex flex-col items-center ">
-        <main className="flex flex-col w-full max-w-md mt-4 ">
-          <div className="h-full">
+      <div className="flex flex-col items-center h-full w-full">
+        <main className="flex flex-col w-full max-w-md mt-4 h-full">
+          <div className="flex-1">
             {/* 지도 컴포넌트 */}
             <Map />
           </div>
 
           {/* "주변 맛집 찾기" 버튼 */}
-          <div className="mt-6">
+          <div className="flex-2">
             <Link href="/recommend">
               <button
-                className="w-full py-3 bg-orange-600 text-white text-lg rounded-lg shadow"
+                className="w-full py-3 bg-orange-600 text-white text-lg rounded-b-lg shadow"
                 onClick={onClickStartButton}
               >
                 주변 맛집 찾기

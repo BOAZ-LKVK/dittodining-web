@@ -9,28 +9,31 @@ import { useState, useRef } from "react";
 export default function RecommnendationResultPage() {
   const [results, setResults] = useState<Restaurant[]>([
     {
-      rastaurantId: "restaurant-1",
+      restaurantId: 1,
       name: "A 덮밥집 목동점",
       catchphrase: "부드러운 치즈버거가 일품인 수제버거 전문점",
       priceRangePerPerson: "₩7,000 ~ ₩10,000",
       distance: "200m (도보 5분)",
       imageUrl: "/food.png",
+      businessHours: "10:00 ~ 22:00",
     },
     {
-      rastaurantId: "restaurant-2",
+      restaurantId: 2,
       name: "B 덮밥집 목동점",
       catchphrase: "부드러운 치즈버거가 일품인 수제버거 전문점",
       priceRangePerPerson: "₩7,000 ~ ₩10,000",
       distance: "200m (도보 5분)",
       imageUrl: "/food.png",
+      businessHours: "10:00 ~ 22:00",
     },
     {
-      rastaurantId: "restaurant-3",
+      restaurantId: 3,
       name: "C 덮밥집 목동점",
       catchphrase: "부드러운 치즈버거가 일품인 수제버거 전문점",
       priceRangePerPerson: "₩7,000 ~ ₩10,000",
       distance: "200m (도보 5분)",
       imageUrl: "/food.png",
+      businessHours: "10:00 ~ 22:00",
     },
   ]);
 
@@ -101,7 +104,7 @@ export default function RecommnendationResultPage() {
             <div className="flex space-x-4">
               {results.map((result, index) => (
                 <div
-                  key={result.rastaurantId}
+                  key={result.restaurantId}
                   className="bg-white rounded-lg shadow-lg w-full flex p-2 min-w-96"
                   onClick={(e) => handleClick(e, index)}
                 >

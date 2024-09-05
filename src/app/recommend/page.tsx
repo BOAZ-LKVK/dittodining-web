@@ -1,29 +1,57 @@
 "use client";
+
 import { Header } from "@/components/header";
-import { SESSION_STORAGE_KEY } from "@/components/session-storage";
+import { useRestaurantRecommendationPage } from "@/hooks/use-restaurant-recommendation-page";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
 
 export default function RecommendationPage() {
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const restaurantId = "restaurant-" + new Date().getTime();
+  const { currentRestaurant, selectedIds, handleSelect, review } =
+    useRestaurantRecommendationPage();
+  const router = useRouter();
 
-  useEffect(() => {
-    const restaurantIds = sessionStorage.getItem(
-      SESSION_STORAGE_KEY.selectedRestaurantIds
-    );
-    if (restaurantIds) {
-      setSelectedIds(JSON.parse(restaurantIds));
+  if (selectedIds.length >= 3) {
+    router.push("/result");
+  }
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (scrollRef.current) {
+      setIsDragging(true);
+      setStartX(e.pageX - scrollRef.current.offsetLeft);
+      setScrollLeft(scrollRef.current.scrollLeft);
     }
-  }, []);
+  };
 
-  const handleSelect = () => {
-    const updatedIds = [...selectedIds, restaurantId];
-    setSelectedIds(updatedIds);
-    sessionStorage.setItem(
-      SESSION_STORAGE_KEY.selectedRestaurantIds,
-      JSON.stringify(updatedIds)
-    );
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // Adjust scroll speed
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleClick = (e: React.MouseEvent, index: number) => {
+    if (scrollRef.current) {
+      const clickedElement = scrollRef.current.children[0].children[
+        index
+      ] as HTMLElement;
+      const elementPosition =
+        clickedElement.offsetLeft - scrollRef.current.offsetLeft;
+      scrollRef.current.scrollTo({
+        left: elementPosition,
+        behavior: "smooth",
+      });
+    }
   };
 
   return (
@@ -34,7 +62,7 @@ export default function RecommendationPage() {
           <div className="h-full">
             <div className="rounded-lg overflow-hidden">
               <Image
-                src="/food.png"
+                src={currentRestaurant.imageUrl}
                 alt="food"
                 width={400}
                 height={300}
@@ -43,48 +71,83 @@ export default function RecommendationPage() {
             </div>
 
             <div className="mt-4 text-gray-700 text-sm">
-              <p className="text-orange-600 font-semibold">
-                부드러운 치즈버거가 일품인 수제버거 전문점
+              <p className={`text-primary font-semibold`}>
+                {currentRestaurant.catchphrase}
               </p>
               <div className="flex space-x-2 mt-2">
-                <h2 className="text-xl font-bold">덮밥집 목동점</h2>
-                <p className="text-gray-500 mt-1">
-                  200m (도보 5분) |{" "}
-                  <a href="#" className="text-blue-600">
-                    길찾기 바로가기
-                  </a>
+                <h2 className={`text-xl font-bold text-secondary`}>
+                  {currentRestaurant.name}
+                </h2>
+                <p className="text-gray-500 mt-1 font-semibold">
+                  {currentRestaurant.distance}
                 </p>
               </div>
+              <p className="mt-1 font-semibold">
+                {currentRestaurant.priceRangePerPerson}{" "}
+                {currentRestaurant.businessHours}
+              </p>
             </div>
 
             <div className="mt-4 pt-2 border-t">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 text-secondary">
                 <h3 className="font-semibold">리뷰</h3>
                 <span className="mx-2">|</span>
-                <span className="text-gray-700">카카오 4.3점(124)</span>
-                <span className="text-gray-700">네이버 4.5점(242)</span>
+                <span className="font-medium">
+                  카카오 {review.statistics.kakao.score}점(
+                  {review.statistics.kakao.count})
+                </span>
+                <span className="font-medium">
+                  네이버 {review.statistics.naver.score}점(
+                  {review.statistics.naver.count})
+                </span>
               </div>
             </div>
 
-            <div className="mt-4 bg-gray-100 p-4 rounded-lg">
-              <p className="font-bold">요아소비빠따정 ★★★★☆</p>
-              <p className="text-gray-700 text-sm mt-1">
-                진짜로 여기에서는 트리플치즈버거 드셔야합니다. 패티 육즙은 말할
-                것도 없고, 일단 버거 번이 입을 정도로 부드러워요. 근데 이게
-                패티의 육즙이랑 만난다? 그냥 게임 끝납니다.
-              </p>
-              <p className="text-gray-500 text-xs mt-2">2024.08.17</p>
+            <div className="flex w-full flex mx-auto max-w-md">
+              <div
+                ref={scrollRef}
+                className="w-full overflow-x-auto scrollbar-hide cursor-grab select-none"
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseUp}
+              >
+                <div className="flex space-x-4">
+                  {review.reviews.map((reviewItem) => (
+                    <div className="bg-gray-100 p-4 rounded-lg mt-4 flex flex-col w-full min-w-96">
+                      <p className="font-bold">
+                        {reviewItem.writer} {"★".repeat(reviewItem.score)}
+                        {"☆".repeat(5 - reviewItem.score)}
+                      </p>
+                      <p className="text-gray-700 text-sm mt-1">
+                        {reviewItem.content}
+                      </p>
+                      <p className="text-gray-500 text-xs mt-2">
+                        {reviewItem.writedAt}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
-          <div className="w-full flex fixed bottom-0 left-0 right-0 mx-auto max-w-md">
-            <button className="flex-1 py-2 text-center bg-gray-300 rounded-md mr-2 w-full">
-              NO
+          <div className="w-full flex fixed bottom-0 left-0 right-0 mx-auto max-w-md bg-secondary h-28 text-white font-bold">
+            <button
+              className="flex-1 py-2 text-center mr-2 w-full"
+              onClick={() => handleSelect(false)}
+            >
+              <div className="text-xl flex justify-center items-center">NO</div>
             </button>
             <button
-              className="flex-1 py-2 text-center bg-orange-600 text-white rounded-md w-full"
-              onClick={handleSelect}
+              className="flex-1 flex-col py-2 items-center w-full h-full"
+              onClick={() => handleSelect(true)}
             >
-              YES ({selectedIds.length}/3)
+              <div className="flex-1 text-xl flex justify-center items-center">
+                YES
+              </div>
+              <div className="flex-1 text-xs flex justify-center items-center">
+                ({selectedIds.length}/3)
+              </div>
             </button>
           </div>
         </main>
