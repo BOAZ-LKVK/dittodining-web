@@ -113,8 +113,8 @@ export default function RecommendationPage() {
                 onMouseLeave={handleMouseUp}
               >
                 <div className="flex space-x-4">
-                  {review.reviews.map((reviewItem) => (
-                    <div className="bg-gray-100 p-4 rounded-lg mt-4 flex flex-col w-full min-w-96">
+                  {review.reviews.map((reviewItem, index) => (
+                    <div className="bg-gray-100 p-4 rounded-lg mt-4 flex flex-col w-full min-w-96" key={index}>
                       <p className="font-bold">
                         {reviewItem.writer} {"★".repeat(reviewItem.score)}
                         {"☆".repeat(5 - reviewItem.score)}
