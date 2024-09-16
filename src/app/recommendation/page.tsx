@@ -5,7 +5,6 @@ import { makeDistance, makePriceRangePerPerson } from "@/domain/restaurant";
 import { useRestaurantRecommendationPage } from "@/hooks/use-restaurant-recommendation-page";
 import { formatDateString } from "@/utils/datetime";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 export default function RecommendationPage() {

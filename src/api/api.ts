@@ -9,7 +9,8 @@ export const API_PATH = {
     `/api/recommendation/${restaurantRecommendationRequestId}/restaurants`,
   SELECT_RESTAURANT_RECOMMENDATION: (
     restaurantRecommendationRequestId: number
-  ) => `/api/recommendation/${restaurantRecommendationRequestId}/select`,
+  ) =>
+    `/api/recommendation/${restaurantRecommendationRequestId}/restaurants/select`,
   GET_RESTAURANT_RECOMMENDATION_RESULT: (
     restaurantRecommendationRequestId: number
   ) => `/api/recommendation/${restaurantRecommendationRequestId}/result`,

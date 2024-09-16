@@ -2,6 +2,7 @@ import {
   API_PATH,
   listRecommendedRestaurants,
   RecommendedRestaurant,
+  selectRestaurantRecommendations,
 } from "@/api/api";
 import { useRestaurantRecommendationRequestId } from "@/hooks/use-restaurant-recommendation-request-id";
 import { SESSION_STORAGE_KEY } from "@/utils/session-storage";
@@ -87,7 +88,7 @@ export const useRestaurantRecommendationPage = () => {
   const review = currentRestaurantRecommendation?.review;
   const menus = currentRestaurantRecommendation?.menuItems;
 
-  const handleSelect = (isLike: boolean) => {
+  const handleSelect = async (isLike: boolean) => {
     if (!isLike) {
       getNextRestaurantRecommendation();
       return;
@@ -96,6 +97,12 @@ export const useRestaurantRecommendationPage = () => {
     if (currentRestaurant === undefined) {
       throw new Error("currentRestaurant 데이터가 없습니다.");
     }
+
+    await selectRestaurantRecommendations(restaurantRecommendationRequestId, {
+      restaurantRecommendationIDs: [
+        currentRestaurant.restaurantRecommendationId,
+      ],
+    });
 
     const updatedIds = [...selectedIds, currentRestaurant.restaurantId];
     setSelectedIds(updatedIds);
