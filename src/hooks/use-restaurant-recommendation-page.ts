@@ -3,6 +3,7 @@ import {
   listRecommendedRestaurants,
   RecommendedRestaurant,
 } from "@/api/api";
+import { useRestaurantRecommendationRequestId } from "@/hooks/use-restaurant-recommendation-request-id";
 import { SESSION_STORAGE_KEY } from "@/utils/session-storage";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -15,11 +16,8 @@ export const useRestaurantRecommendationPage = () => {
 
   const router = useRouter();
 
-  const restaurantRecommendationRequestId = Number(
-    sessionStorage.getItem(
-      SESSION_STORAGE_KEY.restaurantRecommendationRequestId
-    )
-  );
+  const { restaurantRecommendationRequestId } =
+    useRestaurantRecommendationRequestId();
 
   const {
     data: listRecommendedRestaurantsData,

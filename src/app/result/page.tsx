@@ -1,19 +1,27 @@
 "use client";
 
-import { RecommendedRestaurant } from "@/api/api";
 import { Header } from "@/components/header";
 import Map from "@/components/map";
-import Image from "next/image";
-import { useState, useRef } from "react";
+import { makeDistance, makePriceRangePerPerson } from "@/domain/restaurant";
+import { useRecommendationResultPage } from "@/hooks/use-recommendation-result-page";
+import { useRef, useState } from "react";
 
 export default function RecommnendationResultPage() {
-  const [results, setResults] = useState<RecommendedRestaurant[]>([
-  ]);
-
+  const { results, isLoading, isError } = useRecommendationResultPage();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>오류가 발생했습니다. 잠시후 다시 시도해주세요.</div>;
+  }
+
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (scrollRef.current) {
@@ -75,9 +83,9 @@ export default function RecommnendationResultPage() {
             onMouseLeave={handleMouseUp}
           >
             <div className="flex space-x-4">
-              {results.map((result, index) => (
+              {results?.map((result, index) => (
                 <div
-                  key={result.restaurant.restaurantId}
+                  key={result.recommendedRestaurant.restaurant.restaurantId}
                   className="bg-white rounded-lg shadow-lg w-full flex p-2 min-w-96"
                   onClick={(e) => handleClick(e, index)}
                 >
@@ -90,13 +98,15 @@ export default function RecommnendationResultPage() {
                     className="object-cover rounded-lg select-none"
                   /> */}
                   <div className="ml-4">
-                    <h2 className="text-lg font-bold">{result.restaurant.name}</h2>
+                    <h2 className="text-lg font-bold">{result.recommendedRestaurant.restaurant.name}</h2>
                     <p className="text-sm text-orange-600">
-                      {result.restaurant.description}
+                      {result.recommendedRestaurant.restaurant.description}
                     </p>
                     <p className="text-sm text-gray-600">
-                      {result.restaurant.maximumPricePerPerson}{` ~ `}{result.restaurant.minimumPricePerPerson}
-                      | {result.restaurant.distanceInMeters}
+                      {makePriceRangePerPerson(
+                        result.recommendedRestaurant.restaurant.maximumPricePerPerson,
+                        result.recommendedRestaurant.restaurant.minimumPricePerPerson
+                      )} {makeDistance(result.recommendedRestaurant.restaurant.distanceInMeters)}
                     </p>
                   </div>
                 </div>

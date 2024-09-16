@@ -109,7 +109,7 @@ type GetRestaurantRecommendationResultResponse = {
 
 type RestaurantRecommendationResult = {
   restaurantRecommendationId: number;
-  restaurant: RecommendedRestaurant;
+  recommendedRestaurant: RecommendedRestaurant;
 };
 
 export const getRestaurantRecommendationResult = async (

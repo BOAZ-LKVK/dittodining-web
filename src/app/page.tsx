@@ -2,12 +2,14 @@
 import { requestRestaurantRecommendation } from "@/api/api";
 import { Header } from "@/components/header";
 import Map from "@/components/map";
+import { useRestaurantRecommendationRequestId } from "@/hooks/use-restaurant-recommendation-request-id";
 import { SESSION_STORAGE_KEY } from "@/utils/session-storage";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
 
+  // TODO: hooks로 refactoring
   const onClickStartButton = async () => {
     const { restaurantRecommendationRequestId } = await requestRestaurantRecommendation(
       {
@@ -18,10 +20,9 @@ export default function Home() {
       },
     );
 
-    sessionStorage.setItem(
-      SESSION_STORAGE_KEY.restaurantRecommendationRequestId,
-      restaurantRecommendationRequestId.toString(),
-    );
+    const { updateRestaurantRecommendationRequestId } = useRestaurantRecommendationRequestId()
+
+    updateRestaurantRecommendationRequestId(restaurantRecommendationRequestId);
     sessionStorage.removeItem(SESSION_STORAGE_KEY.selectedRestaurantIds);
 
     // url path 상수화
