@@ -1,9 +1,9 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 // TODO: Replace with actual API base URL using environment variables
-const API_BASE_URL = "localhost:8080";
+const API_BASE_URL = "http://localhost:8080";
 
-const API_PATH = {
+export const API_PATH = {
   REQUEST_RESTAUNRANT_RECOMMENDATION: "/api/recommendation",
   LIST_RECOMMENDED_RESTAURANTS: (restaurantRecommendationRequestId: number) =>
     `/api/recommendation/${restaurantRecommendationRequestId}/restaurants`,
@@ -33,14 +33,14 @@ export const api = (axiosConfig?: AxiosRequestConfig<unknown>) => {
 
 export const getApiUrl = (path: string) => `${API_BASE_URL}${path}`;
 
-type RequestRestaurantRecommendationRequest = {
+export type RequestRestaurantRecommendationRequest = {
   userLocation: {
     latitude: number;
     longitude: number;
   };
 };
 
-type RequestRestaurantRecommendationResponse = {
+export type RequestRestaurantRecommendationResponse = {
   restaurantRecommendationRequestId: number;
 };
 
@@ -48,19 +48,19 @@ export const requestRestaurantRecommendation = async (
   request: RequestRestaurantRecommendationRequest
 ) => {
   const response = await api().post<RequestRestaurantRecommendationResponse>(
-    API_PATH.REQUEST_RESTAUNRANT_RECOMMENDATION,
+    getApiUrl(API_PATH.REQUEST_RESTAUNRANT_RECOMMENDATION),
     { ...request }
   );
 
   return response.data;
 };
 
-type ListRecommendedRestaurantsRequest = {
+export type ListRecommendedRestaurantsRequest = {
   limit?: number;
 };
 
-type ListRecommendedRestaurantsResponse = {
-  restaurants: RecommendedRestaurant[];
+export type ListRecommendedRestaurantsResponse = {
+  recommendedRestaurants: RecommendedRestaurant[];
 };
 
 export const listRecommendedRestaurants = async (
@@ -73,26 +73,30 @@ export const listRecommendedRestaurants = async (
   }
 
   const response = await api().get<ListRecommendedRestaurantsResponse>(
-    API_PATH.LIST_RECOMMENDED_RESTAURANTS(restaurantRecommendationRequestId),
+    getApiUrl(
+      API_PATH.LIST_RECOMMENDED_RESTAURANTS(restaurantRecommendationRequestId)
+    ),
     { params: request }
   );
   return response.data;
 };
 
-type SelectRestaurantRecommendationsRequest = {
+export type SelectRestaurantRecommendationsRequest = {
   // 음식점 추천 ID 목록
   restaurantRecommendationIDs: number[];
 };
 
-type SelectRestaurantRecommendationsResponse = {};
+export type SelectRestaurantRecommendationsResponse = {};
 
 export const selectRestaurantRecommendations = async (
   restaurantRecommendationRequestId: number,
   request: SelectRestaurantRecommendationsRequest
 ) => {
   const response = await api().post<SelectRestaurantRecommendationsResponse>(
-    API_PATH.SELECT_RESTAURANT_RECOMMENDATION(
-      restaurantRecommendationRequestId
+    getApiUrl(
+      API_PATH.SELECT_RESTAURANT_RECOMMENDATION(
+        restaurantRecommendationRequestId
+      )
     ),
     { ...request }
   );
@@ -112,14 +116,16 @@ export const getRestaurantRecommendationResult = async (
   restaurantRecommendationRequestId: number
 ) => {
   const response = await api().get<GetRestaurantRecommendationResultResponse>(
-    API_PATH.GET_RESTAURANT_RECOMMENDATION_RESULT(
-      restaurantRecommendationRequestId
+    getApiUrl(
+      API_PATH.GET_RESTAURANT_RECOMMENDATION_RESULT(
+        restaurantRecommendationRequestId
+      )
     )
   );
   return response.data;
 };
 
-type RecommendedRestaurant = {
+export type RecommendedRestaurant = {
   // 음식점
   restaurant: RestaurantRecommendation;
   // 음식점 메뉴 목록
@@ -128,18 +134,19 @@ type RecommendedRestaurant = {
   review: RestaurantReview;
 };
 
-type RestaurantRecommendation = {
+export type RestaurantRecommendation = {
   restaurantRecommendationId: number;
   restaurantId: number;
   name: string;
   description: string;
-  priceRangePerPerson: string;
-  distance: string;
+  maximumPricePerPerson: number;
+  minimumPricePerPerson: number;
+  distanceInMeters: number;
   businessHours: BusinessHour[];
   restaurantImageUrls: string[];
 };
 
-type BusinessHour = {
+export type BusinessHour = {
   // 요일 enum: DayOfWeek e.g. DAY_OF_WEEK_SUNDAY
   dayOfWeekEnum: DayOfWeek;
   // 시작 시간 e.g. 10:00
@@ -150,7 +157,7 @@ type BusinessHour = {
   isClosedDay: boolean;
 };
 
-enum DayOfWeek {
+export enum DayOfWeek {
   DAY_OF_WEEK_UNKNOWN,
   DAY_OF_WEEK_SUNDAY,
   DAY_OF_WEEK_MONDAY,
@@ -161,7 +168,7 @@ enum DayOfWeek {
   DAY_OF_WEEK_SATURDAY,
 }
 
-type RestaurantMenu = {
+export type RestaurantMenu = {
   // 음식점 메뉴 ID
   restaurantMenuId: number;
   // 음식 사진 url
@@ -174,30 +181,30 @@ type RestaurantMenu = {
   description?: string;
 };
 
-type RestaurantReviewStatistics = {
+export type RestaurantReviewStatistics = {
   kakao?: RestaurantReviewKakaoStatistics;
   naver?: RestaurantReviewNaverStatistics;
 };
 
-type RestaurantReviewKakaoStatistics = {
+export type RestaurantReviewKakaoStatistics = {
   averageScore: number;
   count: number;
 };
 
-type RestaurantReviewNaverStatistics = {
+export type RestaurantReviewNaverStatistics = {
   averageScore: number;
   count: number;
 };
 
-type RestaurantReviewItem = {
+export type RestaurantReviewItem = {
   reviewId: number;
   writerName: string;
   score: number;
   content: string;
-  writtenAt: string;
+  wroteAt: string;
 };
 
-type RestaurantReview = {
+export type RestaurantReview = {
   statistics: RestaurantReviewStatistics;
   reviews: RestaurantReviewItem[];
   totalCount: number;

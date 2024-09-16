@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ReactQueryProvider from "@/components/query-client-provider";
 
 export const metadata: Metadata = {
   title: "디토다이닝",
@@ -14,9 +15,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <div className="min-h-screen flex flex-col items-center">
-          <main className="flex-1 w-full pw-4">{children}</main>
-        </div>
+        <ReactQueryProvider>
+          <div className="min-h-screen flex flex-col items-center">
+            <main className="flex-1 w-full pw-4">{children}</main>
+          </div>
+        </ReactQueryProvider>
       </body>
     </html>
   );

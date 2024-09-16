@@ -1,40 +1,13 @@
 "use client";
 
+import { RecommendedRestaurant } from "@/api/api";
 import { Header } from "@/components/header";
 import Map from "@/components/map";
-import { Restaurant } from "@/models/restaurant";
 import Image from "next/image";
 import { useState, useRef } from "react";
 
 export default function RecommnendationResultPage() {
-  const [results, setResults] = useState<Restaurant[]>([
-    {
-      restaurantId: 1,
-      name: "A 덮밥집 목동점",
-      catchphrase: "부드러운 치즈버거가 일품인 수제버거 전문점",
-      priceRangePerPerson: "₩7,000 ~ ₩10,000",
-      distance: "200m (도보 5분)",
-      imageUrl: "/food.png",
-      businessHours: "10:00 ~ 22:00",
-    },
-    {
-      restaurantId: 2,
-      name: "B 덮밥집 목동점",
-      catchphrase: "부드러운 치즈버거가 일품인 수제버거 전문점",
-      priceRangePerPerson: "₩7,000 ~ ₩10,000",
-      distance: "200m (도보 5분)",
-      imageUrl: "/food.png",
-      businessHours: "10:00 ~ 22:00",
-    },
-    {
-      restaurantId: 3,
-      name: "C 덮밥집 목동점",
-      catchphrase: "부드러운 치즈버거가 일품인 수제버거 전문점",
-      priceRangePerPerson: "₩7,000 ~ ₩10,000",
-      distance: "200m (도보 5분)",
-      imageUrl: "/food.png",
-      businessHours: "10:00 ~ 22:00",
-    },
+  const [results, setResults] = useState<RecommendedRestaurant[]>([
   ]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -104,24 +77,26 @@ export default function RecommnendationResultPage() {
             <div className="flex space-x-4">
               {results.map((result, index) => (
                 <div
-                  key={result.restaurantId}
+                  key={result.restaurant.restaurantId}
                   className="bg-white rounded-lg shadow-lg w-full flex p-2 min-w-96"
                   onClick={(e) => handleClick(e, index)}
                 >
-                  <Image
-                    src={result.imageUrl}
-                    alt={result.name}
+                  {/* TODO: image는 캐로셀로 여러개 보이도록 */}
+                  {/* <Image
+                    src={result.restaurant.restaurantImageUrls[0]}
+                    alt={result.restaurant.name}
                     width={80}
                     height={80}
                     className="object-cover rounded-lg select-none"
-                  />
+                  /> */}
                   <div className="ml-4">
-                    <h2 className="text-lg font-bold">{result.name}</h2>
+                    <h2 className="text-lg font-bold">{result.restaurant.name}</h2>
                     <p className="text-sm text-orange-600">
-                      {result.catchphrase}
+                      {result.restaurant.description}
                     </p>
                     <p className="text-sm text-gray-600">
-                      {result.priceRangePerPerson} | {result.distance}
+                      {result.restaurant.maximumPricePerPerson}{` ~ `}{result.restaurant.minimumPricePerPerson}
+                      | {result.restaurant.distanceInMeters}
                     </p>
                   </div>
                 </div>

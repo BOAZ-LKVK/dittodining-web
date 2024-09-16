@@ -1,17 +1,20 @@
 "use client";
 
 import { Header } from "@/components/header";
+import { makeDistance, makePriceRangePerPerson } from "@/domain/restaurant";
 import { useRestaurantRecommendationPage } from "@/hooks/use-restaurant-recommendation-page";
+import { formatDateString } from "@/utils/datetime";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 export default function RecommendationPage() {
-  const { currentRestaurant, selectedIds, handleSelect, review } =
+  const { currentRestaurant, selectedIds, handleSelect, review, menus, getNextRestaurantRecommendation, isLoading } =
     useRestaurantRecommendationPage();
   const router = useRouter();
 
   if (selectedIds.length >= 3) {
+    // TODO: path 상수화
     router.push("/result");
   }
 
@@ -19,6 +22,16 @@ export default function RecommendationPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // TODO: Error handling
+  if (currentRestaurant === undefined) {
+    return <div>오류가 발생했습니다. 잠시후 다시 시도해주세요.</div>;
+  }
+
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (scrollRef.current) {
@@ -40,19 +53,6 @@ export default function RecommendationPage() {
     scrollRef.current.scrollLeft = scrollLeft - walk;
   };
 
-  const handleClick = (e: React.MouseEvent, index: number) => {
-    if (scrollRef.current) {
-      const clickedElement = scrollRef.current.children[0].children[
-        index
-      ] as HTMLElement;
-      const elementPosition =
-        clickedElement.offsetLeft - scrollRef.current.offsetLeft;
-      scrollRef.current.scrollTo({
-        left: elementPosition,
-        behavior: "smooth",
-      });
-    }
-  };
 
   return (
     <div>
@@ -60,9 +60,10 @@ export default function RecommendationPage() {
         <Header />
         <main className="flex flex-col w-full max-w-md p-4">
           <div className="h-full">
+            {/* TOOD: Image 캐로셀 형태로 보여지도록 */}
             <div className="rounded-lg overflow-hidden">
               <Image
-                src={currentRestaurant.imageUrl}
+                src={currentRestaurant.restaurantImageUrls[0]}
                 alt="food"
                 width={400}
                 height={300}
@@ -72,64 +73,75 @@ export default function RecommendationPage() {
 
             <div className="mt-4 text-gray-700 text-sm">
               <p className={`text-primary font-semibold`}>
-                {currentRestaurant.catchphrase}
+                {currentRestaurant.description}
               </p>
               <div className="flex space-x-2 mt-2">
                 <h2 className={`text-xl font-bold text-secondary`}>
                   {currentRestaurant.name}
                 </h2>
                 <p className="text-gray-500 mt-1 font-semibold">
-                  {currentRestaurant.distance}
+                  {makeDistance(currentRestaurant.distanceInMeters)}
                 </p>
               </div>
               <p className="mt-1 font-semibold">
-                {currentRestaurant.priceRangePerPerson}{" "}
-                {currentRestaurant.businessHours}
+                {makePriceRangePerPerson(currentRestaurant.minimumPricePerPerson, currentRestaurant.maximumPricePerPerson)}
+                {currentRestaurant.businessHours.find(
+                  (businessHour) => businessHour.dayOfWeekEnum === 1
+                )?.openTime}{" "}
+
               </p>
             </div>
+            {review === undefined ? '' : (
+              <>
 
-            <div className="mt-4 pt-2 border-t">
-              <div className="flex items-center space-x-2 text-secondary">
-                <h3 className="font-semibold">리뷰</h3>
-                <span className="mx-2">|</span>
-                <span className="font-medium">
-                  카카오 {review.statistics.kakao.score}점(
-                  {review.statistics.kakao.count})
-                </span>
-                <span className="font-medium">
-                  네이버 {review.statistics.naver.score}점(
-                  {review.statistics.naver.count})
-                </span>
-              </div>
-            </div>
-
-            <div className="flex w-full flex mx-auto max-w-md">
-              <div
-                ref={scrollRef}
-                className="w-full overflow-x-auto scrollbar-hide cursor-grab select-none"
-                onMouseDown={handleMouseDown}
-                onMouseUp={handleMouseUp}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseUp}
-              >
-                <div className="flex space-x-4">
-                  {review.reviews.map((reviewItem, index) => (
-                    <div className="bg-gray-100 p-4 rounded-lg mt-4 flex flex-col w-full min-w-96" key={index}>
-                      <p className="font-bold">
-                        {reviewItem.writer} {"★".repeat(reviewItem.score)}
-                        {"☆".repeat(5 - reviewItem.score)}
-                      </p>
-                      <p className="text-gray-700 text-sm mt-1">
-                        {reviewItem.content}
-                      </p>
-                      <p className="text-gray-500 text-xs mt-2">
-                        {reviewItem.writedAt}
-                      </p>
-                    </div>
-                  ))}
+                <div className="mt-4 pt-2 border-t">
+                  <div className="flex items-center space-x-2 text-secondary">
+                    <h3 className="font-semibold">리뷰</h3>
+                    <span className="mx-2">|</span>
+                    <span className="font-medium">
+                      카카오 {review.statistics.kakao?.averageScore}점(
+                      {review.statistics.kakao?.count})
+                    </span>
+                    <span className="font-medium">
+                      네이버 {review.statistics.naver?.averageScore}점(
+                      {review.statistics.naver?.count})
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </div>
+
+                <div className="flex w-full flex mx-auto max-w-md">
+                  <div
+                    ref={scrollRef}
+                    className="w-full overflow-x-auto scrollbar-hide cursor-grab select-none"
+                    onMouseDown={handleMouseDown}
+                    onMouseUp={handleMouseUp}
+                    onMouseMove={handleMouseMove}
+                    onMouseLeave={handleMouseUp}
+                  >
+                    <div className="flex space-x-4">
+                      {review.reviews.map((reviewItem, index) => (
+                        <div className="bg-gray-100 p-4 rounded-lg mt-4 flex flex-col w-full min-w-96" key={index}>
+                          <p className="font-bold">
+                            {reviewItem.writerName} {"★".repeat(reviewItem.score)}
+                            {"☆".repeat(5 - reviewItem.score)}
+                          </p>
+                          <p className="text-gray-700 text-sm mt-1">
+                            {reviewItem.content}
+                          </p>
+                          <p className="text-gray-500 text-xs mt-2">
+                            {formatDateString(reviewItem.wroteAt)}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )
+            }
+
+
+
           </div>
           <div className="w-full flex fixed bottom-0 left-0 right-0 mx-auto max-w-md bg-secondary h-28 text-white font-bold">
             <button

@@ -1,53 +1,37 @@
-import { SESSION_STORAGE_KEY } from "@/components/session-storage";
-import { Restaurant } from "@/models/restaurant";
+import {
+  API_PATH,
+  listRecommendedRestaurants,
+  RecommendedRestaurant,
+} from "@/api/api";
+import { SESSION_STORAGE_KEY } from "@/utils/session-storage";
+import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const useRestaurantRecommendationPage = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [currentRestaurantRecommendation, setCurrentRestaurantRecommendation] =
+    useState<RecommendedRestaurant>();
 
-  // 실제 API데이터로 변경 필요
-  const currentRestaurant: Restaurant = {
-    restaurantId: 1,
-    name: "A 덮밥집 목동점",
-    catchphrase: "부드러운 치즈버거가 일품인 수제버거 전문점",
-    priceRangePerPerson: "₩7,000 ~ ₩10,000",
-    distance: "200m (도보 5분)",
-    imageUrl: "/food.png",
-    businessHours: "10:00 ~ 22:00",
-  };
+  const restaurantRecommendationRequestId = Number(
+    sessionStorage.getItem(
+      SESSION_STORAGE_KEY.restaurantRecommendationRequestId
+    )
+  );
 
-  const review = {
-    statistics: {
-      kakao: { score: 4.3, count: 124 },
-      naver: { score: 4.5, count: 242 },
-    },
-    reviews: [
-      {
-        reviewId: 1,
-        writer: "요아소비빠따정",
-        score: 4,
-        content:
-          "진짜로 여기에서는 트리플치즈버거 드셔야합니다. 패티 육즙은 말할 것도 없고, 일단 버거 번이 입을 정도로 부드러워요. 근데 이게 패티의 육즙이랑 만난다? 그냥 게임 끝납니다.",
-        writedAt: "2021-09-01 12:00:00",
-      },
-      {
-        reviewId: 2,
-        writer: "요아소비빠따정",
-        score: 4,
-        content:
-          "진짜로 여기에서는 트리플치즈버거 드셔야합니다. 패티 육즙은 말할 것도 없고, 일단 버거 번이 입을 정도로 부드러워요. 근데 이게 패티의 육즙이랑 만난다? 그냥 게임 끝납니다.",
-        writedAt: "2021-09-01 12:00:00",
-      },
-      {
-        reviewId: 3,
-        writer: "요아소비빠따정",
-        score: 4,
-        content:
-          "진짜로 여기에서는 트리플치즈버거 드셔야합니다. 패티 육즙은 말할 것도 없고, 일단 버거 번이 입을 정도로 부드러워요. 근데 이게 패티의 육즙이랑 만난다? 그냥 게임 끝납니다.",
-        writedAt: "2021-09-01 12:00:00",
-      },
+  const {
+    data: listRecommendedRestaurantsData,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: [
+      API_PATH.LIST_RECOMMENDED_RESTAURANTS(restaurantRecommendationRequestId),
     ],
-  };
+    queryFn: () =>
+      listRecommendedRestaurants(restaurantRecommendationRequestId, {
+        limit: 10,
+      }),
+  });
 
   useEffect(() => {
     const restaurantIds = sessionStorage.getItem(
@@ -58,10 +42,58 @@ export const useRestaurantRecommendationPage = () => {
     }
   }, []);
 
+  if (isLoading || isError) {
+    return {
+      selectedIds: selectedIds,
+      isLoading: isLoading,
+      isError: isError,
+    };
+  }
+
+  if (listRecommendedRestaurantsData === undefined) {
+    throw new Error("음식점 추천 데이터를 불러오는 중 에러가 발생했습니다.");
+  }
+
+  if (currentRestaurantRecommendation === undefined) {
+    // 초기값 세팅
+    setCurrentRestaurantRecommendation(
+      listRecommendedRestaurantsData?.recommendedRestaurants[0]
+    );
+  }
+
+  const getNextRestaurantRecommendation = () => {
+    const currentIndex =
+      listRecommendedRestaurantsData.recommendedRestaurants.findIndex(
+        (restaurant) =>
+          restaurant.restaurant.restaurantRecommendationId ===
+          currentRestaurantRecommendation?.restaurant.restaurantRecommendationId
+      );
+
+    if (
+      currentIndex ===
+      listRecommendedRestaurantsData.recommendedRestaurants.length - 1
+    ) {
+      // TODO: 마지막 음식점 추천인 경우 데이터를 좀 더 조회하기
+      return undefined;
+    }
+
+    setCurrentRestaurantRecommendation(
+      listRecommendedRestaurantsData.recommendedRestaurants[currentIndex + 1]
+    );
+  };
+
+  const currentRestaurant = currentRestaurantRecommendation?.restaurant;
+  const review = currentRestaurantRecommendation?.review;
+  const menus = currentRestaurantRecommendation?.menuItems;
+
   const handleSelect = (isLike: boolean) => {
     if (!isLike) {
       // TODO: 실제 API 호출 및 데이터 업데이트
       return;
+    }
+
+    if (currentRestaurant === undefined) {
+      throw new Error("currentRestaurant 데이터가 없습니다.");
     }
 
     const updatedIds = [...selectedIds, currentRestaurant.restaurantId];
@@ -77,5 +109,9 @@ export const useRestaurantRecommendationPage = () => {
     selectedIds: selectedIds,
     handleSelect: handleSelect,
     review: review,
+    menus: menus,
+    getNextRestaurantRecommendation: getNextRestaurantRecommendation,
+    isLoading: isLoading,
+    isError: isError,
   };
 };
