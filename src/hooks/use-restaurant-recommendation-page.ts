@@ -5,13 +5,15 @@ import {
 } from "@/api/api";
 import { SESSION_STORAGE_KEY } from "@/utils/session-storage";
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const useRestaurantRecommendationPage = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [currentRestaurantRecommendation, setCurrentRestaurantRecommendation] =
     useState<RecommendedRestaurant>();
+
+  const router = useRouter();
 
   const restaurantRecommendationRequestId = Number(
     sessionStorage.getItem(
@@ -74,6 +76,7 @@ export const useRestaurantRecommendationPage = () => {
       listRecommendedRestaurantsData.recommendedRestaurants.length - 1
     ) {
       // TODO: 마지막 음식점 추천인 경우 데이터를 좀 더 조회하기
+      // TODO: 더 이상 추천 데이터가 없는 경우 처리하기
       return undefined;
     }
 
@@ -88,7 +91,7 @@ export const useRestaurantRecommendationPage = () => {
 
   const handleSelect = (isLike: boolean) => {
     if (!isLike) {
-      // TODO: 실제 API 호출 및 데이터 업데이트
+      getNextRestaurantRecommendation();
       return;
     }
 
@@ -102,6 +105,13 @@ export const useRestaurantRecommendationPage = () => {
       SESSION_STORAGE_KEY.selectedRestaurantIds,
       JSON.stringify(updatedIds)
     );
+
+    if (selectedIds.length >= 3) {
+      // TODO: path 상수화
+      router.push("/result");
+    }
+
+    getNextRestaurantRecommendation();
   };
 
   return {
@@ -110,7 +120,6 @@ export const useRestaurantRecommendationPage = () => {
     handleSelect: handleSelect,
     review: review,
     menus: menus,
-    getNextRestaurantRecommendation: getNextRestaurantRecommendation,
     isLoading: isLoading,
     isError: isError,
   };

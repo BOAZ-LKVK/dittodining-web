@@ -9,14 +9,9 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 export default function RecommendationPage() {
-  const { currentRestaurant, selectedIds, handleSelect, review, menus, getNextRestaurantRecommendation, isLoading } =
+  const { currentRestaurant, selectedIds, handleSelect, review, menus, isLoading } =
     useRestaurantRecommendationPage();
-  const router = useRouter();
 
-  if (selectedIds.length >= 3) {
-    // TODO: path 상수화
-    router.push("/result");
-  }
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
