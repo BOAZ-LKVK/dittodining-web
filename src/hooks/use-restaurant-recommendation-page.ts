@@ -111,7 +111,7 @@ export const useRestaurantRecommendationPage = () => {
       JSON.stringify(updatedIds)
     );
 
-    if (selectedIds.length >= 3) {
+    if (updatedIds.length >= 3) {
       // TODO: path 상수화
       router.push("/result");
     }
