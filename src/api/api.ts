@@ -173,7 +173,7 @@ export type RestaurantMenu = {
   // 음식점 메뉴 ID
   restaurantMenuId: number;
   // 음식 사진 url
-  imageUrl: string;
+  imageUrl?: string;
   // 메뉴명
   name: string;
   // 가격
