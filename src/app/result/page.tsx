@@ -127,7 +127,6 @@ export default function RecommnendationResultPage() {
     )
   };
 
-
   return (
     <div className="flex flex-col items-center w-full min-h-screen bg-white h-screen">
       <Header />
