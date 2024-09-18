@@ -1,4 +1,5 @@
 import { requestRestaurantRecommendation } from "@/api/api";
+import { DEFAULT_LOCATION } from "@/constants";
 import { useRestaurantRecommendationRequestId } from "@/hooks/use-restaurant-recommendation-request-id";
 import { SESSION_STORAGE_KEY } from "@/utils/session-storage";
 import { useRouter } from "next/navigation";
@@ -8,13 +9,7 @@ export const useHomePage = () => {
   const [userLocation, setUserLocation] = useState<{
     latitude: number;
     longitude: number;
-  }>(
-    // 기본 값은 강남역 좌표
-    {
-      latitude: 37.496486063,
-      longitude: 127.028361548,
-    }
-  );
+  }>(DEFAULT_LOCATION);
 
   const [isLoading, setIsLoading] = useState(true);
 

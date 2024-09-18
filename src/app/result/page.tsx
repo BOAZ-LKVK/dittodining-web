@@ -1,6 +1,7 @@
 "use client";
 
 import { Header } from "@/components/header";
+import { DEFAULT_LOCATION } from "@/constants";
 import { makeDistance, makePriceRangePerPerson } from "@/domain/restaurant";
 import { useRecommendationResultPage } from "@/hooks/use-recommendation-result-page";
 import { useRef, useState } from "react";
@@ -65,7 +66,12 @@ export default function RecommnendationResultPage() {
       lat: selectedResult.recommendedRestaurant.restaurant.location.latitude,
       lng: selectedResult.recommendedRestaurant.restaurant.location.longitude,
     }
-    : { lat: 37.5665, lng: 126.9780 };
+    : {
+      lat: DEFAULT_LOCATION.latitude,
+      lng: DEFAULT_LOCATION.longitude,
+    };
+
+
   return (
     <div className="flex flex-col items-center w-full min-h-screen bg-white h-screen">
       <Header />
