@@ -6,10 +6,10 @@ import { DEFAULT_LOCATION } from "@/constants";
 import { makeDistance, makePriceRangePerPerson } from "@/domain/restaurant";
 import { useRecommendationResultPage } from "@/hooks/use-recommendation-result-page";
 import { useRef, useState } from "react";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { CustomOverlayMap, Map, MapMarker } from "react-kakao-maps-sdk";
 
 export default function RecommnendationResultPage() {
-  const { results, isLoading, isError, selectedResult, setSelectedResult } = useRecommendationResultPage();
+  const { results, isLoading, isError, selectedResult, setSelectedResult, onClickShowDetailButton } = useRecommendationResultPage();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -92,6 +92,41 @@ export default function RecommnendationResultPage() {
       lng: DEFAULT_LOCATION.longitude,
     };
 
+  const MarkerContainer = ({ result, index, isSelected }: { result: RestaurantRecommendationResult, index: number, isSelected: boolean }) => {
+    const [isVisible, setVisible] = useState(true);
+
+    const markerPosition = {
+      lat: result.recommendedRestaurant.restaurant.location.latitude,
+      lng: result.recommendedRestaurant.restaurant.location.longitude,
+    }
+
+    return (
+      <div>
+        <MapMarker
+          position={markerPosition}
+          onClick={(marker) => {
+            onClickMarker(result, index);
+          }}
+        >
+        </MapMarker>
+        {isSelected && <CustomOverlayMap
+          position={markerPosition}
+          yAnchor={2.1}
+        >
+          <button onClick={onClickShowDetailButton}>
+            <div
+              className="bg-white text-black p-2 rounded-lg shadow-lg text-center cursor-pointer"
+              style={{ whiteSpace: "nowrap" }}
+            >
+
+              <p className="text-sm font-semibold">자세히 보기</p>
+            </div>
+          </button>
+        </CustomOverlayMap>}
+      </div>
+    )
+  };
+
 
   return (
     <div className="flex flex-col items-center w-full min-h-screen bg-white h-screen">
@@ -115,16 +150,11 @@ export default function RecommnendationResultPage() {
             }
             <Map center={mapCenter} style={{ width: "100%", height: "100%" }}>
               {results.map((result, index) => {
-                return <MapMarker
+                return <MarkerContainer
                   key={result.recommendedRestaurant.restaurant.restaurantId}
-                  position={{
-                    lat: result.recommendedRestaurant.restaurant.location.latitude,
-                    lng: result.recommendedRestaurant.restaurant.location.longitude,
-                  }}
-                  title={result.recommendedRestaurant.restaurant.name}
-                  onClick={(marker) => {
-                    onClickMarker(result, index);
-                  }}
+                  result={result}
+                  index={index}
+                  isSelected={selectedResult?.restaurantRecommendationId === result.restaurantRecommendationId}
                 />
               })}
             </Map>

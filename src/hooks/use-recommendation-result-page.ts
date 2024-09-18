@@ -5,6 +5,7 @@ import {
 } from "@/api/api";
 import { useRestaurantRecommendationRequestId } from "@/hooks/use-restaurant-recommendation-request-id";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const useRecommendationResultPage = () => {
@@ -12,6 +13,7 @@ export const useRecommendationResultPage = () => {
     useState<RestaurantRecommendationResult>();
   const { restaurantRecommendationRequestId, isLoading: isRequestIdLoading } =
     useRestaurantRecommendationRequestId();
+  const router = useRouter();
 
   const {
     data: recommendationResult,
@@ -34,16 +36,25 @@ export const useRecommendationResultPage = () => {
     }
   }, [recommendationResult?.results, selectedResult]);
 
+  const onClickShowDetailButton = () => {
+    if (selectedResult) {
+      router.push(
+        `/recommendation/${selectedResult.restaurantRecommendationId}`
+      );
+    }
+  };
+
   const isLoading =
     isRequestIdLoading || isQueryLoading || selectedResult === undefined;
 
   if (isLoading || isError) {
     return {
-      error: isError,
-      isLoading: isLoading,
+      isError,
+      isLoading,
       results: [],
-      setSelectedResult: setSelectedResult,
-      selectedResult: selectedResult,
+      setSelectedResult,
+      selectedResult,
+      onClickShowDetailButton,
     };
   }
 
@@ -60,9 +71,10 @@ export const useRecommendationResultPage = () => {
 
   return {
     results: recommendationResult.results,
-    isError: isError,
-    isLoading: isLoading,
-    setSelectedResult: setSelectedResult,
-    selectedResult: selectedResult,
+    isError,
+    isLoading,
+    setSelectedResult,
+    selectedResult,
+    onClickShowDetailButton,
   };
 };
