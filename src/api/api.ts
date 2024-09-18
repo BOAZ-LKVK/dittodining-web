@@ -13,7 +13,10 @@ export const API_PATH = {
     `/api/recommendation/request/${restaurantRecommendationRequestId}/restaurants/select`,
   GET_RESTAURANT_RECOMMENDATION_RESULT: (
     restaurantRecommendationRequestId: number
-  ) => `/api/recommendation/request/${restaurantRecommendationRequestId}/result`,
+  ) =>
+    `/api/recommendation/request/${restaurantRecommendationRequestId}/result`,
+  GET_RESTAURANT_RECOMMENDATION: (restaurantRecommendationId: number) =>
+    `/api/recommendation/recommendations/${restaurantRecommendationId}`,
 };
 
 export const apiConfig = {
@@ -126,6 +129,22 @@ export const getRestaurantRecommendationResult = async (
   return response.data;
 };
 
+export type GetRestaurantRecommendationResponse = {
+  recommendation: RecommendedRestaurant;
+};
+
+export const getRestaurantRecommendation = async (
+  restaurantRecommendationId: number
+) => {
+  const response = await api().get<GetRestaurantRecommendationResponse>(
+    getApiUrl(
+      API_PATH.GET_RESTAURANT_RECOMMENDATION(restaurantRecommendationId)
+    )
+  );
+
+  return response.data;
+};
+
 export type RecommendedRestaurant = {
   // 음식점
   restaurant: RestaurantRecommendation;
@@ -143,7 +162,7 @@ export type RestaurantRecommendation = {
   location: {
     latitude: number;
     longitude: number;
-  }
+  };
   maximumPricePerPerson: number;
   minimumPricePerPerson: number;
   distanceInMeters: number;

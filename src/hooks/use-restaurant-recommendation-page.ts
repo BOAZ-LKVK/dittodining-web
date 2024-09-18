@@ -124,6 +124,7 @@ export const useRestaurantRecommendationPage = () => {
   };
 
   return {
+    currentRestaurantRecommendation:currentRestaurantRecommendation,
     currentRestaurant: currentRestaurant,
     selectedIds: selectedIds,
     handleSelect: handleSelect,
