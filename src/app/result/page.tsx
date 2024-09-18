@@ -1,5 +1,6 @@
 "use client";
 
+import { RestaurantRecommendationResult } from "@/api/api";
 import { Header } from "@/components/header";
 import { DEFAULT_LOCATION } from "@/constants";
 import { makeDistance, makePriceRangePerPerson } from "@/domain/restaurant";
@@ -13,7 +14,6 @@ export default function RecommnendationResultPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -34,6 +34,12 @@ export default function RecommnendationResultPage() {
 
   const handleMouseUp = () => {
     setIsDragging(false);
+
+    if (scrollRef.current && results.length > 0) {
+      const x = scrollRef.current.scrollLeft;
+      const index = Math.round(x / scrollRef.current.offsetWidth);
+      setSelectedResult(results[index]);
+    }
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -59,6 +65,21 @@ export default function RecommnendationResultPage() {
       setSelectedResult(results[index]);
     }
   };
+
+  const onClickMarker = (result: RestaurantRecommendationResult, index: number) => {
+    setSelectedResult(results[index]);
+    if (scrollRef.current) {
+      const clickedElement = scrollRef.current.children[0].children[
+        index
+      ] as HTMLElement;
+      const elementPosition =
+        clickedElement.offsetLeft - scrollRef.current.offsetLeft;
+      scrollRef.current.scrollTo({
+        left: elementPosition,
+        behavior: "smooth",
+      });
+    }
+  }
 
 
   const mapCenter = selectedResult
@@ -93,7 +114,7 @@ export default function RecommnendationResultPage() {
               </div>
             }
             <Map center={mapCenter} style={{ width: "100%", height: "100%" }}>
-              {results.map((result) => {
+              {results.map((result, index) => {
                 return <MapMarker
                   key={result.recommendedRestaurant.restaurant.restaurantId}
                   position={{
@@ -101,6 +122,9 @@ export default function RecommnendationResultPage() {
                     lng: result.recommendedRestaurant.restaurant.location.longitude,
                   }}
                   title={result.recommendedRestaurant.restaurant.name}
+                  onClick={(marker) => {
+                    onClickMarker(result, index);
+                  }}
                 />
               })}
             </Map>
