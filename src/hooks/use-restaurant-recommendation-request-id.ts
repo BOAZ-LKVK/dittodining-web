@@ -1,11 +1,30 @@
 import { SESSION_STORAGE_KEY } from "@/utils/session-storage";
+import { useEffect, useState } from "react";
 
 export const useRestaurantRecommendationRequestId = () => {
-  const restaurantRecommendationRequestId = Number(
-    sessionStorage.getItem(
+  const [
+    restaurantRecommendationRequestId,
+    setRestaurantRecommendationRequestId,
+  ] = useState<number | null>(null);
+  const [isInitial, setIsInitial] = useState(true);
+
+  useEffect(() => {
+    if (!isInitial) {
+      return;
+    }
+
+    const restaurantRecommendationRequestId = sessionStorage.getItem(
       SESSION_STORAGE_KEY.restaurantRecommendationRequestId
-    )
-  );
+    );
+
+    if (restaurantRecommendationRequestId) {
+      setRestaurantRecommendationRequestId(
+        Number(restaurantRecommendationRequestId)
+      );
+    }
+
+    setIsInitial(false);
+  }, [isInitial]);
 
   return {
     restaurantRecommendationRequestId: restaurantRecommendationRequestId,
@@ -17,5 +36,6 @@ export const useRestaurantRecommendationRequestId = () => {
         restaurantRecommendationRequestId.toString()
       );
     },
+    isLoading: isInitial,
   };
 };

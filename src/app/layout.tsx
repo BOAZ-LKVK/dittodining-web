@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/app/globals.css";
 import ReactQueryProvider from "@/components/query-client-provider";
+import Script from "next/script";
+import { KAKAO_MAP_APP_KEY } from "@/constants";
 
 export const metadata: Metadata = {
   title: "디토다이닝",
@@ -20,6 +22,10 @@ export default function RootLayout({
             <main className="flex-1 w-full pw-4">{children}</main>
           </div>
         </ReactQueryProvider>
+        <Script
+          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_APP_KEY}&libraries=services,clusterer&autoload=false`}
+          strategy="beforeInteractive"
+        />
       </body>
     </html>
   );

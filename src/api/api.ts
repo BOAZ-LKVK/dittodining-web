@@ -104,11 +104,11 @@ export const selectRestaurantRecommendations = async (
   return response.data;
 };
 
-type GetRestaurantRecommendationResultResponse = {
+export type GetRestaurantRecommendationResultResponse = {
   results: RestaurantRecommendationResult[];
 };
 
-type RestaurantRecommendationResult = {
+export type RestaurantRecommendationResult = {
   restaurantRecommendationId: number;
   recommendedRestaurant: RecommendedRestaurant;
 };
@@ -140,6 +140,10 @@ export type RestaurantRecommendation = {
   restaurantId: number;
   name: string;
   description: string;
+  location: {
+    latitude: number;
+    longitude: number;
+  }
   maximumPricePerPerson: number;
   minimumPricePerPerson: number;
   distanceInMeters: number;

@@ -14,24 +14,26 @@ export const useRestaurantRecommendationPage = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [currentRestaurantRecommendation, setCurrentRestaurantRecommendation] =
     useState<RecommendedRestaurant>();
+  const { restaurantRecommendationRequestId, isLoading: isRequestIdLoading } =
+    useRestaurantRecommendationRequestId();
 
   const router = useRouter();
 
-  const { restaurantRecommendationRequestId } =
-    useRestaurantRecommendationRequestId();
-
   const {
     data: listRecommendedRestaurantsData,
-    isLoading,
+    isLoading: isQueryLoading,
     isError,
   } = useQuery({
     queryKey: [
-      API_PATH.LIST_RECOMMENDED_RESTAURANTS(restaurantRecommendationRequestId),
+      API_PATH.LIST_RECOMMENDED_RESTAURANTS(
+        restaurantRecommendationRequestId!!
+      ),
     ],
     queryFn: () =>
-      listRecommendedRestaurants(restaurantRecommendationRequestId, {
+      listRecommendedRestaurants(restaurantRecommendationRequestId!!, {
         limit: 10,
       }),
+    enabled: !!restaurantRecommendationRequestId,
   });
 
   useEffect(() => {
@@ -42,6 +44,8 @@ export const useRestaurantRecommendationPage = () => {
       setSelectedIds(JSON.parse(restaurantIds));
     }
   }, []);
+
+  const isLoading = isQueryLoading || isRequestIdLoading;
 
   if (isLoading || isError) {
     return {
@@ -58,7 +62,7 @@ export const useRestaurantRecommendationPage = () => {
   if (currentRestaurantRecommendation === undefined) {
     // 초기값 세팅
     setCurrentRestaurantRecommendation(
-      listRecommendedRestaurantsData?.recommendedRestaurants[0]
+      listRecommendedRestaurantsData.recommendedRestaurants[0]
     );
   }
 
@@ -98,7 +102,7 @@ export const useRestaurantRecommendationPage = () => {
       throw new Error("currentRestaurant 데이터가 없습니다.");
     }
 
-    await selectRestaurantRecommendations(restaurantRecommendationRequestId, {
+    await selectRestaurantRecommendations(restaurantRecommendationRequestId!!, {
       restaurantRecommendationIDs: [
         currentRestaurant.restaurantRecommendationId,
       ],
