@@ -4,16 +4,16 @@ import axios, { AxiosRequestConfig } from "axios";
 const API_BASE_URL = "http://localhost:8080";
 
 export const API_PATH = {
-  REQUEST_RESTAUNRANT_RECOMMENDATION: "/api/recommendation",
+  REQUEST_RESTAUNRANT_RECOMMENDATION: "/api/recommendation/request",
   LIST_RECOMMENDED_RESTAURANTS: (restaurantRecommendationRequestId: number) =>
-    `/api/recommendation/${restaurantRecommendationRequestId}/restaurants`,
+    `/api/recommendation/request/${restaurantRecommendationRequestId}/restaurants`,
   SELECT_RESTAURANT_RECOMMENDATION: (
     restaurantRecommendationRequestId: number
   ) =>
-    `/api/recommendation/${restaurantRecommendationRequestId}/restaurants/select`,
+    `/api/recommendation/request/${restaurantRecommendationRequestId}/restaurants/select`,
   GET_RESTAURANT_RECOMMENDATION_RESULT: (
     restaurantRecommendationRequestId: number
-  ) => `/api/recommendation/${restaurantRecommendationRequestId}/result`,
+  ) => `/api/recommendation/request/${restaurantRecommendationRequestId}/result`,
 };
 
 export const apiConfig = {
