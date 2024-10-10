@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 // TODO: Replace with actual API base URL using environment variables
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = "http://api.dittodining.com";
 
 export const API_PATH = {
   REQUEST_RESTAUNRANT_RECOMMENDATION: "/api/recommendation/request",
