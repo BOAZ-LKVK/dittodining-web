@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 
 // TODO: Replace with actual API base URL using environment variables
 const API_BASE_URL = "https://api.dittodining.com";
+// const API_BASE_URL = "http://localhost:8080";
 
 export const API_PATH = {
   REQUEST_RESTAUNRANT_RECOMMENDATION: "/api/recommendation/request",
@@ -196,7 +197,7 @@ export type RestaurantMenu = {
   // 음식점 메뉴 ID
   restaurantMenuId: number;
   // 음식 사진 url
-  imageUrl?: string;
+  imageUrl: string | null;
   // 메뉴명
   name: string;
   // 가격

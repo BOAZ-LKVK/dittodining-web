@@ -19,12 +19,13 @@ export default function RecommendationPage() {
 
   return (
     <div>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center h-screen">
         <Header />
-        <main className="flex flex-col w-full max-w-md p-4">
-          <RestaurantRecommendation restaurantRecommendation={currentRestaurantRecommendation} />
-
-          <div className="w-full flex fixed bottom-0 left-0 right-0 mx-auto max-w-md bg-secondary h-28 text-white font-bold">
+        <main className="flex flex-col w-full max-w-md overflow-auto scrollbar-hide">
+          <div className="flex-grow overflow-auto p-4 scrollbar-hide">
+            <RestaurantRecommendation restaurantRecommendation={currentRestaurantRecommendation} />
+          </div>
+          <div className="w-full flex mx-auto max-w-md bg-secondary h-28 text-white font-bold">
             <button
               className="flex-1 py-2 text-center mr-2 w-full"
               onClick={() => handleSelect(false)}
