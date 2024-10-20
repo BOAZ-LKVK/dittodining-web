@@ -1,10 +1,11 @@
 "use client";
 
-import { RestaurantRecommendationResult } from "@/api/api";
+import { makeDayOfWeek, RestaurantRecommendationResult } from "@/api/api";
 import { Header } from "@/components/header";
 import { DEFAULT_LOCATION } from "@/constants";
 import { makeDistance, makePriceRangePerPerson } from "@/domain/restaurant";
 import { useRecommendationResultPage } from "@/hooks/use-recommendation-result-page";
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { CustomOverlayMap, Map, MapMarker } from "react-kakao-maps-sdk";
 
@@ -14,6 +15,7 @@ export default function RecommnendationResultPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const now = new Date();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -127,19 +129,19 @@ export default function RecommnendationResultPage() {
     )
   };
 
+
   return (
-    <div className="flex flex-col items-center w-full min-h-screen bg-white h-screen">
+    <div className="flex flex-col w-full min-h-screen bg-white h-screen">
       <Header />
-      <main className="w-full max-w-md mt-4 flex flex-col items-center h-full">
+      <main className="w-full max-w-md mt-4 flex flex-col h-full">
         <div className="text-center px-4 flex-2">
-          <h1 className="text-lg font-bold text-orange-600">오늘 뭐먹지?</h1>
-          <p className="mt-2 text-xl font-semibold text-gray-800">
+          <p className="mt-2 text-xl font-semibold text-gray-800 text-secondary">
             선택하신 음식점을 모아왔어요.
           </p>
           <p className="text-lg text-gray-600">원하는 음식점을 찾아가보세요!</p>
         </div>
 
-        <div className="w-full mt-6 flex-1">
+        <div className="w-full mt-6 flex-1 items-center ">
           <div className="w-full h-full bg-gray-200">
             {isLoading &&
               <div role="status" className="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2">
@@ -170,34 +172,50 @@ export default function RecommnendationResultPage() {
             onMouseLeave={handleMouseUp}
           >
             <div className="flex space-x-4">
-              {results.map((result, index) => (
-                <div
-                  key={result.recommendedRestaurant.restaurant.restaurantId}
-                  className="bg-white rounded-lg shadow-lg w-full flex p-2 min-w-96"
-                  onClick={(e) => handleClick(e, index)}
-                >
-                  {/* TODO: image는 캐로셀로 여러개 보이도록 */}
-                  {/* <Image
-                    src={result.restaurant.restaurantImageUrls[0]}
-                    alt={result.restaurant.name}
-                    width={80}
-                    height={80}
-                    className="object-cover rounded-lg select-none"
-                  /> */}
-                  <div className="ml-4">
-                    <h2 className="text-lg font-bold">{result.recommendedRestaurant.restaurant.name}</h2>
-                    <p className="text-sm text-orange-600">
-                      {result.recommendedRestaurant.restaurant.description}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      {makePriceRangePerPerson(
-                        result.recommendedRestaurant.restaurant.maximumPricePerPerson,
-                        result.recommendedRestaurant.restaurant.minimumPricePerPerson
-                      )} {makeDistance(result.recommendedRestaurant.restaurant.distanceInMeters)}
-                    </p>
+              {results.map((result, index) => {
+                const { recommendedRestaurant } = result;
+
+                return (
+                  <div
+                    key={recommendedRestaurant.restaurant.restaurantId}
+                    className="bg-white rounded-lg shadow-lg w-full flex p-2 min-w-96"
+                    onClick={(e) => handleClick(e, index)}
+                  >
+                    <div>
+                      <Image
+                        src={recommendedRestaurant.restaurant.restaurantImageUrls[0]}
+                        alt={recommendedRestaurant.restaurant.name}
+                        width={100}
+                        height={100}
+                        className="object-cover rounded-lg select-none"
+                      />
+                    </div>
+                    <div className="ml-4 overflow-hidden">
+                      <h2 className="text-lg font-bold">{recommendedRestaurant.restaurant.name}</h2>
+                      <p className="text-sm text-orange-600 overflow-hidden text-ellipsis">
+                        {recommendedRestaurant.restaurant.description}
+                      </p>
+                      <div className="flex flex-grow">
+                        <div className="text-sm text-gray-600">
+                          {makePriceRangePerPerson(
+                            recommendedRestaurant.restaurant.maximumPricePerPerson,
+                            recommendedRestaurant.restaurant.minimumPricePerPerson
+                          )}
+                        </div>
+                        <div className="ml-1">
+                          {
+                            recommendedRestaurant.restaurant.businessHours.find(
+                              (businessHour) => businessHour.dayOfWeekEnum === makeDayOfWeek(now)
+                            )?.openTime}
+                        </div>
+                      </div>
+                      <div className="text-sm font-semibold text-gray-400">
+                        {makeDistance(recommendedRestaurant.restaurant.distanceInMeters)}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </div>

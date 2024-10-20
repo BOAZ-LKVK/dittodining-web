@@ -183,15 +183,36 @@ export type BusinessHour = {
 };
 
 export enum DayOfWeek {
-  DAY_OF_WEEK_UNKNOWN,
-  DAY_OF_WEEK_SUNDAY,
-  DAY_OF_WEEK_MONDAY,
-  DAY_OF_WEEK_TUESDAY,
-  DAY_OF_WEEK_WEDNESDAY,
-  DAY_OF_WEEK_THURSDAY,
-  DAY_OF_WEEK_FRIDAY,
-  DAY_OF_WEEK_SATURDAY,
+  DAY_OF_WEEK_UNKNOWN = "DAY_OF_WEEK_UNKNOWN",
+  DAY_OF_WEEK_SUNDAY = "DAY_OF_WEEK_SUNDAY",
+  DAY_OF_WEEK_MONDAY = "DAY_OF_WEEK_MONDAY",
+  DAY_OF_WEEK_TUESDAY = "DAY_OF_WEEK_TUESDAY",
+  DAY_OF_WEEK_WEDNESDAY = "DAY_OF_WEEK_WEDNESDAY",
+  DAY_OF_WEEK_THURSDAY = "DAY_OF_WEEK_THURSDAY",
+  DAY_OF_WEEK_FRIDAY = "DAY_OF_WEEK_FRIDAY",
+  DAY_OF_WEEK_SATURDAY = "DAY_OF_WEEK_SATURDAY",
 }
+
+export const makeDayOfWeek = (date: Date): DayOfWeek => {
+  switch (date.getDay()) {
+    case 0:
+      return DayOfWeek.DAY_OF_WEEK_SUNDAY;
+    case 1:
+      return DayOfWeek.DAY_OF_WEEK_MONDAY;
+    case 2:
+      return DayOfWeek.DAY_OF_WEEK_TUESDAY;
+    case 3:
+      return DayOfWeek.DAY_OF_WEEK_WEDNESDAY;
+    case 4:
+      return DayOfWeek.DAY_OF_WEEK_THURSDAY;
+    case 5:
+      return DayOfWeek.DAY_OF_WEEK_FRIDAY;
+    case 6:
+      return DayOfWeek.DAY_OF_WEEK_SATURDAY;
+    default:
+      return DayOfWeek.DAY_OF_WEEK_UNKNOWN;
+  }
+};
 
 export type RestaurantMenu = {
   // 음식점 메뉴 ID
