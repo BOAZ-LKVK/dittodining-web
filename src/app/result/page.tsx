@@ -198,8 +198,8 @@ export default function RecommnendationResultPage() {
                       <div className="flex flex-grow">
                         <div className="text-sm text-gray-600">
                           {makePriceRangePerPerson(
-                            recommendedRestaurant.restaurant.maximumPricePerPerson,
-                            recommendedRestaurant.restaurant.minimumPricePerPerson
+                            recommendedRestaurant.restaurant.minimumPricePerPerson,
+                            recommendedRestaurant.restaurant.maximumPricePerPerson
                           )}
                         </div>
                         <div className="ml-1">
