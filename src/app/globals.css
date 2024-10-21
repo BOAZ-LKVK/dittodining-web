@@ -18,4 +18,16 @@ body {
   max-width: 768px;
   margin: 0 auto;
   padding: 0;
+  /* for mobile viewport */
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
+
+@supports (-webkit-touch-callout: none) {
+  height: -webkit-fill-available;
+}
+
+html {
+  /* for mobild viewport */
+  height: -webkit-fill-available;
 }
