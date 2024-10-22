@@ -192,9 +192,10 @@ export default function RecommnendationResultPage() {
                     </div>
                     <div className="ml-4 overflow-hidden">
                       <h2 className="text-lg font-bold">{recommendedRestaurant.restaurant.name}</h2>
-                      <p className="text-sm text-orange-600 overflow-hidden text-ellipsis">
+                      {/* TOOD: 음식점 설명 데이터 파이프라인 작업 후 추가 */}
+                      {/* <p className="text-sm text-orange-600 overflow-hidden text-ellipsis">
                         {recommendedRestaurant.restaurant.description}
-                      </p>
+                      </p> */}
                       <div className="flex flex-grow">
                         <div className="text-sm text-gray-600">
                           {makePriceRangePerPerson(
