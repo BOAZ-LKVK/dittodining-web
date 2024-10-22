@@ -19,6 +19,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwind-scrollbar-hide")],
+  plugins: [require("tailwind-scrollbar-hide"), require("postcss-100vh-fix")],
 };
 export default config;

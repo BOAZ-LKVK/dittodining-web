@@ -16,13 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-
       <body>
         <ReactQueryProvider>
-          <div className="min-h-screen flex flex-col items-center">
-            <main className="flex-1 w-full pw-4">{children}</main>
-          </div>
+          {children}
         </ReactQueryProvider>
         <Script
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_APP_KEY}&libraries=services,clusterer&autoload=false`}

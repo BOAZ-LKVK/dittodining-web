@@ -27,13 +27,13 @@ export default function RecommendationPage() {
           </div>
           <div className="w-full flex mx-auto max-w-md bg-secondary h-28 text-white font-bold">
             <button
-              className="flex-1 py-2 text-center mr-2 w-full"
+              className="flex-1 text-center w-full"
               onClick={() => handleSelect(false)}
             >
               <div className="text-xl flex justify-center items-center">NO</div>
             </button>
             <button
-              className="flex-1 flex-col py-2 items-center w-full h-full"
+              className="flex-1 text-center w-full"
               onClick={() => handleSelect(true)}
             >
               <div className="flex-1 text-xl flex justify-center items-center">
