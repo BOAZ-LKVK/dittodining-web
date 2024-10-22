@@ -1,5 +1,5 @@
 import { RestaurantReview } from "@/api/api";
-import { formatDateString } from "@/utils/datetime";
+import { ReviewItem } from "@/components/recommendation/review-item";
 import { useRef, useState } from "react";
 
 type Props = {
@@ -59,18 +59,7 @@ export const Reviews = ({ review }: Props) => {
       >
         <div className="flex space-x-4">
           {review.reviews.map((reviewItem, index) => (
-            <div className="bg-gray-100 p-4 rounded-lg mt-4 flex flex-col w-full min-w-96" key={index}>
-              <p className="font-bold">
-                {reviewItem.writerName} {"★".repeat(reviewItem.score)}
-                {"☆".repeat(5 - reviewItem.score)}
-              </p>
-              <p className="text-gray-700 text-sm mt-1">
-                {reviewItem.content}
-              </p>
-              <p className="text-gray-500 text-xs mt-2">
-                {formatDateString(reviewItem.wroteAt)}
-              </p>
-            </div>
+            <ReviewItem key={index} reviewItem={reviewItem} />
           ))}
         </div>
       </div>

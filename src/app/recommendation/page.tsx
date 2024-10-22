@@ -22,7 +22,7 @@ export default function RecommendationPage() {
       <div className="flex flex-col items-center h-screen">
         <Header />
         <main className="flex flex-col w-full max-w-md overflow-auto scrollbar-hide">
-          <div className="flex-grow overflow-auto p-4 scrollbar-hide">
+          <div className="p-4 flex-grow overflow-auto scrollbar-hide">
             <RestaurantRecommendation restaurantRecommendation={currentRestaurantRecommendation} />
           </div>
           <div className="w-full flex mx-auto max-w-md bg-secondary h-28 text-white font-bold">

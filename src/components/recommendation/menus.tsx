@@ -52,7 +52,7 @@ export const Menus = ({ menus }: Props) => {
         >
           <div className="flex space-x-4">
             {menus.map((menu, index) => (
-              <div className="bg-gray-100 p-4 rounded-lg mt-4 flex w-full min-w-96" key={menu.restaurantMenuId}>
+              <div className="bg-gray-100 p-4 rounded-lg mt-4 flex w-full min-w-72" key={menu.restaurantMenuId}>
                 <div className="h-16 w-16">
                   {menu.imageUrl === null ? '' :
                     <Image
