@@ -16,7 +16,7 @@ export const RestaurantRecommendation = ({ restaurantRecommendation }: Props) =>
     <>
       {/* TOOD: Image 캐로셀 형태로 보여지도록 */}
       <RestaurantInfo restaurant={restaurant} />
-      <div className="border-b my-" />
+      <div className="border-b my-4" />
       {review === undefined ? '' :
         <Reviews review={review} />
       }

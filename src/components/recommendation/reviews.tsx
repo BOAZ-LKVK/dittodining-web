@@ -33,7 +33,7 @@ export const Reviews = ({ review }: Props) => {
   };
 
   return <>
-    <div className="mt-4 pt-2">
+    <div className="mt-2">
       <div className="flex items-center space-x-2 text-secondary">
         <div className="font-bold">
           리뷰
