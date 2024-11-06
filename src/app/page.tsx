@@ -18,10 +18,11 @@ export default function Home() {
 
 
   return (
-    <div className="flex flex-col w-full h-dvh bg-white">
+    <div className="flex flex-col w-full h-dvh bg-white items-center">
       <Header />
-      <main className="flex flex-col flex-grow">
-        <div className="flex-1 bg-gray-200">
+
+      <main className="flex flex-col flex-grow w-full max-w-md">
+        <div className="flex-1 bg-gray-200 w-full">
           <div className="w-full h-full">
             <Map
               center={{ lat: userLocation.latitude, lng: userLocation.longitude }}
@@ -40,7 +41,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex-2 ">
+        <div className="flex-2">
           <button
             className="w-full py-3 bg-orange-600 text-white text-lg rounded-b-lg shadow"
             onClick={onClickStartButton}
