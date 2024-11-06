@@ -17,7 +17,7 @@ export const KakaoMapLink = ({ userLocation, placeName, latitude, longitude }: P
 
   return (
     <a href={kakaoMapUrl} target="_blank" rel="noopener noreferrer">
-      {placeName} 길찾기
+      카카오맵에서 길찾기
     </a>
   );
 };
