@@ -41,10 +41,12 @@ export const Reviews = ({ review }: Props) => {
         <div className="mx-2 font-bold">
           |
         </div>
+
         <div className="font-medium text-sm">
           카카오 {review.statistics.kakao?.averageScore}점(
           {review.statistics.kakao?.count})
         </div>
+
         <div className="font-medium text-sm">
           네이버 {review.statistics.naver?.averageScore}점(
           {review.statistics.naver?.count})
