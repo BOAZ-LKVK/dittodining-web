@@ -22,8 +22,25 @@ export const ReviewItem = ({ reviewItem }: ReviewItemProps) => {
     setIsExpanded(!isExpanded);
   };
 
+  const handleFocus = () => {
+    if (contentRef.current) {
+      const isOverflowing = contentRef.current.scrollHeight > contentRef.current.clientHeight;
+      setIsOverflowing(isOverflowing);
+      setIsExpanded(isOverflowing);
+    }
+  };
+
+  const handleBlur = () => {
+    setIsExpanded(false);
+  };
+
   return (
-    <div className="flex flex-col min-w-56 p-4 rounded-lg mt-4 bg-gray-100 ">
+    <div
+      className={`flex-col min-w-56 p-4 rounded-lg mt-4 bg-gray-100 ${isExpanded ? "" : "max-h-46"}`}
+      tabIndex={0} // Focus를 받을 수 있도록 설정
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+    >
       <div className="flex justify-between">
         <div className="font-bold text-secondary">
           {reviewItem.writerName}
@@ -37,22 +54,26 @@ export const ReviewItem = ({ reviewItem }: ReviewItemProps) => {
 
       <div
         ref={contentRef}
-        className={`mt-4 transition-all duration-500 ${isExpanded ? "whitespace-normal" : "max-h-16 whitespace-wrap overflow-hidden text-ellipsis"
-          }`}
+        className={`mt-4 transition-all duration-500 overflow-hidden ${isExpanded ? "line-clamp-none" : "line-clamp-3"}`}
       >
-        <div className="font-semibold text-gray-700 text-xs">
-          {reviewItem.content}
+        <div className="flex-col font-semibold text-gray-700 text-xs">
+          <div>
+            {reviewItem.content}
+          </div>
         </div>
       </div>
 
       {isOverflowing && (
-        <button
-          className="text-blue-500 text-sm mt-1 hover:underline text-right"
-          onClick={toggleExpansion}
-        >
-          {isExpanded ? "접기" : "더보기"}
-        </button>
+        <div className="text-right text-xs text-gray-700">
+          <button
+            className="hover:underline"
+            onClick={toggleExpansion}
+          >
+            {isExpanded ? "(접기)" : "(더보기)"}
+          </button>
+        </div>
       )}
+
       <p className="text-gray-500 text-xs mt-2 text-right">
         {formatDateString(reviewItem.wroteAt)}
       </p>

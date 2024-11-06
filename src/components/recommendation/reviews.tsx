@@ -65,7 +65,7 @@ export const Reviews = ({ review }: Props) => {
       >
         <div className="flex space-x-4">
           {review.reviews.map((reviewItem, index) => (
-            <ReviewItem key={index} reviewItem={reviewItem} />
+            <ReviewItem key={reviewItem.reviewId} reviewItem={reviewItem} />
           ))}
         </div>
       </div>
