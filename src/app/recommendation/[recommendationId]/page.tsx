@@ -56,12 +56,11 @@ export default function RecommendationDetailPage({ params }: RecommendationDetai
         </button>
       </header>
 
-      <div className="flex flex-col flex-grow max-w-md w-full">
-        <div className="flex-1 w-full h-full">
-          <main className="flex flex-col w-full p-4">
-            <RestaurantRecommendation restaurantRecommendation={recommendation} />
-          </main>
+      <main className="flex flex-col flex-grow w-full max-w-md overflow-auto scrollbar-hide">
+        <div className="felx-1 p-4 flex-grow overflow-auto scrollbar-hide">
+          <RestaurantRecommendation restaurantRecommendation={recommendation} />
         </div>
+
         <div className="flex-2">
           <button
             className="w-full py-3 bg-orange-600 text-white text-lg rounded-b-lg shadow"
@@ -74,7 +73,7 @@ export default function RecommendationDetailPage({ params }: RecommendationDetai
             />
           </button>
         </div>
-      </div>
+      </main>
     </div >
   );
 }

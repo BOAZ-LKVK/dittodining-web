@@ -25,6 +25,7 @@ export default function RecommendationPage() {
           <div className="p-4 flex-grow overflow-auto scrollbar-hide">
             <RestaurantRecommendation restaurantRecommendation={currentRestaurantRecommendation} />
           </div>
+          
           <div className="w-full flex mx-auto max-w-md bg-secondary h-28 text-white font-bold">
             <button
               className="flex-1 text-center w-full"
