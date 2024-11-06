@@ -36,8 +36,12 @@ export const Menus = ({ menus }: Props) => {
     <>
       <div className="mt-4 pt-2">
         <div className="flex items-center space-x-2 text-secondary">
-          <h3 className="font-semibold">메뉴</h3>
-          <span className="mx-2">|</span>
+          <div className="font-bold">
+            메뉴
+          </div>
+          <div className="mx-2 font-bold">
+            |
+          </div>
         </div>
       </div>
       <div className="flex w-full flex mx-auto max-w-md">

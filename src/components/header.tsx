@@ -9,7 +9,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="w-full p-4 flex justify-between items-center bg-white">
+    <header className="w-full p-5 flex justify-between items-center bg-white">
       <Image
         src="/logo.png"
         alt="logo"

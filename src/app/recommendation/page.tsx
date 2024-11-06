@@ -33,24 +33,26 @@ export default function RecommendationPage() {
               className="flex-col flex-1 py-6 text-center w-full"
               onClick={() => handleSelect(false)}
             >
-              <div className="flex flex-1 items-center justify-center">
+              <div className="flex flex-1 items-center justify-center mb-1">
                 <RefreshIcon />
               </div>
-              <div className="flex flex-1 text-xl justify-center items-center">NO</div>
+              <div className="flex flex-1 justify-center items-center">
+                <div className="text-xl">
+                  NO
+                </div>
+              </div>
             </button>
 
             <button
               className="flex-col flex-1 py-6 text-center w-full items-center justify-center"
               onClick={() => handleSelect(true)}
             >
-              <div className="flex flex-1 justify-center items-center">
+              <div className="flex flex-1 justify-center items-center mb-1">
                 <InBoxArrowDownIcon />
               </div>
-              <div className="flex flex-1 text-xl justify-center items-center">
-                YES
-              </div>
-              <div className="flex flex-1 text-xs justify-center items-center">
-                ({selectedIds.length}/3)
+              <div className="flex flex-1 flex-col justify-center items-center">
+                <div className="text-xl">YES</div>
+                <div className="text-xs">({selectedIds.length}/3)</div>
               </div>
             </button>
           </div>
