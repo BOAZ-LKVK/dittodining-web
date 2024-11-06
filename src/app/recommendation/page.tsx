@@ -19,7 +19,7 @@ export default function RecommendationPage() {
 
   return (
     <div>
-      <div className="flex flex-col items-center h-screen">
+      <div className="flex flex-col items-center h-dvh">
         <Header />
         <main className="flex flex-col w-full max-w-md overflow-auto scrollbar-hide">
           <div className="p-4 flex-grow overflow-auto scrollbar-hide">

@@ -18,7 +18,7 @@ export default function Home() {
 
 
   return (
-    <div className="flex flex-col w-full h-screen bg-white">
+    <div className="flex flex-col w-full h-dvh bg-white">
       <Header />
       <main className="flex flex-col flex-grow">
         <div className="flex-1 bg-gray-200">
@@ -40,7 +40,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex-2">
+        <div className="flex-2 ">
           <button
             className="w-full py-3 bg-orange-600 text-white text-lg rounded-b-lg shadow"
             onClick={onClickStartButton}
