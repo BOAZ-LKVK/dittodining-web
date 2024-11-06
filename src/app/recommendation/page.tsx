@@ -24,7 +24,7 @@ export default function RecommendationPage() {
       <div className="flex flex-col items-center h-dvh">
         <Header />
         <main className="flex flex-col w-full max-w-md overflow-auto scrollbar-hide">
-          <div className="p-8 flex-grow overflow-auto scrollbar-hide">
+          <div className="px-8 pt-4 flex-grow overflow-auto scrollbar-hide">
             <RestaurantRecommendation restaurantRecommendation={currentRestaurantRecommendation} />
           </div>
 
