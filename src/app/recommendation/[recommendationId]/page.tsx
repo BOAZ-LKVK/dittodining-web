@@ -56,7 +56,7 @@ export default function RecommendationDetailPage({ params }: RecommendationDetai
         </button>
       </header>
 
-      <div className="flex flex-col flex-grow max-w-md">
+      <div className="flex flex-col flex-grow max-w-md w-full">
         <div className="flex-1 w-full h-full">
           <main className="flex flex-col w-full p-4">
             <RestaurantRecommendation restaurantRecommendation={recommendation} />
