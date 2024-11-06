@@ -131,7 +131,7 @@ export default function RecommnendationResultPage() {
 
 
   return (
-    <div className="flex flex-col w-full bg-white h-dvh">
+    <div className="flex flex-col w-full bg-white h-dvh items-center">
       <Header />
       <main className="w-full max-w-md mt-4 flex flex-col h-full">
         <div className="text-center px-4 flex-2">

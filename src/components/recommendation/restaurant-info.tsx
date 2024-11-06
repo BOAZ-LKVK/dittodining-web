@@ -1,4 +1,4 @@
-import { makeDayOfWeek, RestaurantRecommendation } from "@/api/api";
+import { RestaurantRecommendation } from "@/api/api";
 import { makeDistance, makeOpenTimeToday, makePriceRangePerPerson } from "@/domain/restaurant";
 import Image from "next/image";
 
@@ -7,7 +7,6 @@ type Props = {
 }
 
 export const RestaurantInfo = ({ restaurant }: Props) => {
-
   return (
     <>
       <div className="rounded-lg overflow-hidden">
