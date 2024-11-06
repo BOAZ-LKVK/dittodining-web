@@ -3,6 +3,7 @@
 import { Header } from "@/components/header";
 import { RestaurantRecommendation } from "@/components/recommendation/recommendation";
 import { useRestaurantRecommendationPage } from "@/hooks/use-restaurant-recommendation-page";
+import Link from "next/link";
 
 export default function RecommendationPage() {
   const { currentRestaurant, currentRestaurantRecommendation, selectedIds, handleSelect, review, menus, isLoading } =

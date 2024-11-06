@@ -1,8 +1,8 @@
 'use client';
 
-import { Header } from "@/components/header";
 import { RestaurantRecommendation } from "@/components/recommendation/recommendation";
 import { useRecommendationDetailPage } from "@/hooks/use-recommendation-detail-page";
+import { useRouter } from "next/navigation";
 
 type RecommendationDetailPageProps = {
   params: {
@@ -13,6 +13,7 @@ type RecommendationDetailPageProps = {
 export default function RecommendationDetailPage({ params }: RecommendationDetailPageProps) {
   const { recommendationId } = params;
   const { recommendation, isLoading, isError } = useRecommendationDetailPage({ recommendationId });
+  const router = useRouter();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -29,7 +30,13 @@ export default function RecommendationDetailPage({ params }: RecommendationDetai
   return (
     <div>
       <div className="flex flex-col items-center">
-        <Header />
+        <header className="w-full p-4 flex justify-between items-center bg-white">
+          <a onClick={() => router.back()}>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4.78125 11.25L11.7813 18.25L10 20L0 10L10 0L11.7813 1.75L4.78125 8.75H20V11.25H4.78125Z" fill="#1D1B20" />
+            </svg>
+          </a>
+        </header>
         <main className="flex flex-col w-full max-w-md p-4">
           <RestaurantRecommendation restaurantRecommendation={recommendation} />
         </main>
