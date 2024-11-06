@@ -1,4 +1,6 @@
 import { RestaurantRecommendation } from "@/api/api";
+import { ClockIcon } from "@/assets/icons/ClockIcon";
+import { UserIcon } from "@/assets/icons/UserIcon";
 import { makeDistance, makeOpenTimeToday, makePriceRangePerPerson } from "@/domain/restaurant";
 import Image from "next/image";
 
@@ -27,16 +29,22 @@ export const RestaurantInfo = ({ restaurant }: Props) => {
           <h2 className="text-xl font-bold text-secondary">
             {restaurant.name}
           </h2>
-          <p className="text-gray-500 mt-1 font-semibold">
+          <p className="text-gray-400 mt-1 font-semibold">
             {makeDistance(restaurant.distanceInMeters)}
           </p>
         </div>
-        <p className="mt-1 font-semibold flex">
-          <div className="mr-1">
-            {makePriceRangePerPerson(restaurant.minimumPricePerPerson, restaurant.maximumPricePerPerson)}
+        <p className="flex mt-1 font-semibold text-black">
+          <div className="mr-1 flex items-center">
+            <UserIcon />
+            <span className="ml-1">
+              {makePriceRangePerPerson(restaurant.minimumPricePerPerson, restaurant.maximumPricePerPerson)}
+            </span>
           </div>
-          <div>
-            {makeOpenTimeToday(restaurant.businessHours)}
+          <div className="flex items-center">
+            <ClockIcon />
+            <span className="ml-1">
+              {makeOpenTimeToday(restaurant.businessHours)}
+            </span>
           </div>
         </p>
       </div>
