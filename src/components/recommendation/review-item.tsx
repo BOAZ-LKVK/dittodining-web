@@ -22,29 +22,59 @@ export const ReviewItem = ({ reviewItem }: ReviewItemProps) => {
     setIsExpanded(!isExpanded);
   };
 
+  const handleFocus = () => {
+    if (contentRef.current) {
+      const isOverflowing = contentRef.current.scrollHeight > contentRef.current.clientHeight;
+      setIsOverflowing(isOverflowing);
+      setIsExpanded(isOverflowing);
+    }
+  };
+
+  const handleBlur = () => {
+    setIsExpanded(false);
+  };
+
   return (
-    <div className="bg-gray-100 p-4 rounded-lg mt-4 flex flex-col w-full min-w-72">
-      <p className="font-bold">
-        {reviewItem.writerName} {"★".repeat(reviewItem.score)}
-        {"☆".repeat(5 - reviewItem.score)}
-      </p>
+    <div
+      className={`flex-col min-w-56 p-4 rounded-lg mt-4 bg-gray-100 ${isExpanded ? "" : "max-h-46"}`}
+      tabIndex={0} // Focus를 받을 수 있도록 설정
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+    >
+      <div className="flex justify-between">
+        <div className="font-bold text-secondary">
+          {reviewItem.writerName}
+        </div>
+
+        <div className="text-[#FFCC00]">
+          {"★".repeat(reviewItem.score)}
+          {"☆".repeat(5 - reviewItem.score)}
+        </div>
+      </div>
+
       <div
         ref={contentRef}
-        className={`text-gray-700 text-sm mt-1 transition-all duration-500 ${
-          isExpanded ? "whitespace-normal" : "max-h-16 whitespace-wrap overflow-hidden text-ellipsis"
-        }`}
+        className={`mt-4 transition-all duration-500 overflow-hidden ${isExpanded ? "line-clamp-none" : "line-clamp-3"}`}
       >
-        {reviewItem.content}
+        <div className="flex-col font-semibold text-gray-700 text-xs">
+          <div>
+            {reviewItem.content}
+          </div>
+        </div>
       </div>
+
       {isOverflowing && (
-        <button
-          className="text-blue-500 text-sm mt-1 hover:underline text-right"
-          onClick={toggleExpansion}
-        >
-          {isExpanded ? "접기" : "더보기"}
-        </button>
+        <div className="text-right text-xs text-gray-700">
+          <button
+            className="hover:underline"
+            onClick={toggleExpansion}
+          >
+            {isExpanded ? "(접기)" : "(더보기)"}
+          </button>
+        </div>
       )}
-      <p className="text-gray-500 text-xs mt-2">
+
+      <p className="text-gray-500 text-xs mt-2 text-right">
         {formatDateString(reviewItem.wroteAt)}
       </p>
     </div>

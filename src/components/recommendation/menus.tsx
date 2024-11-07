@@ -1,4 +1,5 @@
 import { RestaurantMenu } from "@/api/api";
+import { formatNumberWithCommas } from "@/utils/number";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
@@ -36,8 +37,12 @@ export const Menus = ({ menus }: Props) => {
     <>
       <div className="mt-4 pt-2">
         <div className="flex items-center space-x-2 text-secondary">
-          <h3 className="font-semibold">메뉴</h3>
-          <span className="mx-2">|</span>
+          <div className="font-bold">
+            메뉴
+          </div>
+          <div className="mx-2 font-bold">
+            |
+          </div>
         </div>
       </div>
       <div className="flex w-full flex mx-auto max-w-md">
@@ -52,7 +57,7 @@ export const Menus = ({ menus }: Props) => {
         >
           <div className="flex space-x-4">
             {menus.map((menu, index) => (
-              <div className="bg-gray-100 p-4 rounded-lg mt-4 flex w-full min-w-72" key={menu.restaurantMenuId}>
+              <div className="flex min-w-56 bg-gray-100 p-4 rounded-lg mt-4" key={menu.restaurantMenuId}>
                 <div className="h-16 w-16">
                   {menu.imageUrl === null ? '' :
                     <Image
@@ -64,13 +69,13 @@ export const Menus = ({ menus }: Props) => {
                     />}
                 </div>
                 <div className="flex-col flex-grow ml-3">
-                  <div className="font-bold">
+                  <div className="font-bold text-sm">
                     {menu.name}
                   </div>
-                  <div className="mt-3 text-primary font-semibold">
-                    {menu.price}원
+                  <div className="mt-3 text-xs text-primary font-semibold">
+                    {formatNumberWithCommas(menu.price)}원
                   </div>
-                  <div className="mt-1 font-semibold">
+                  <div className="mt-1 text-xs font-semibold">
                     {menu.description}
                   </div>
                 </div>

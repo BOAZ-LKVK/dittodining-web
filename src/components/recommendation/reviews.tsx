@@ -33,18 +33,24 @@ export const Reviews = ({ review }: Props) => {
   };
 
   return <>
-    <div className="mt-4 pt-2">
+    <div className="mt-2">
       <div className="flex items-center space-x-2 text-secondary">
-        <h3 className="font-semibold">리뷰</h3>
-        <span className="mx-2">|</span>
-        <span className="font-medium">
+        <div className="font-bold">
+          리뷰
+        </div>
+        <div className="mx-2 font-bold">
+          |
+        </div>
+
+        <div className="font-medium text-sm">
           카카오 {review.statistics.kakao?.averageScore}점(
           {review.statistics.kakao?.count})
-        </span>
-        <span className="font-medium">
+        </div>
+
+        <div className="font-medium text-sm">
           네이버 {review.statistics.naver?.averageScore}점(
           {review.statistics.naver?.count})
-        </span>
+        </div>
       </div>
     </div>
 
@@ -59,7 +65,7 @@ export const Reviews = ({ review }: Props) => {
       >
         <div className="flex space-x-4">
           {review.reviews.map((reviewItem, index) => (
-            <ReviewItem key={index} reviewItem={reviewItem} />
+            <ReviewItem key={reviewItem.reviewId} reviewItem={reviewItem} />
           ))}
         </div>
       </div>

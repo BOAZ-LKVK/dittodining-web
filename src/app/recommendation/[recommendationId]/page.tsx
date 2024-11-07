@@ -1,5 +1,6 @@
 'use client';
 
+import { ArrowLeftIcon } from "@/assets/icons/ArrowLeftIcon";
 import { KakaoMapLink } from "@/components/kakao-map-link";
 import { RestaurantRecommendation } from "@/components/recommendation/recommendation";
 import { useRecommendationDetailPage } from "@/hooks/use-recommendation-detail-page";
@@ -50,9 +51,7 @@ export default function RecommendationDetailPage({ params }: RecommendationDetai
     <div className="flex flex-col h-dvh items-center">
       <header className="w-full p-4 flex justify-between items-center bg-white">
         <button onClick={() => router.back()}>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4.78125 11.25L11.7813 18.25L10 20L0 10L10 0L11.7813 1.75L4.78125 8.75H20V11.25H4.78125Z" fill="#1D1B20" />
-          </svg>
+          <ArrowLeftIcon />
         </button>
       </header>
 
