@@ -29,32 +29,35 @@ export default function RecommendationPage() {
           </div>
 
           <div className="w-full flex mx-auto max-w-md bg-secondary h-28 text-white font-bold">
-            <button
-              className="flex-col flex-1 py-6 text-center w-full"
-              onClick={() => handleSelect(false)}
-            >
-              <div className="flex flex-1 items-center justify-center mb-1">
-                <RefreshIcon />
-              </div>
-              <div className="flex flex-1 justify-center items-center">
-                <div className="text-xl">
-                  NO
+            <div className="flex-1">
+              <button
+                className="flex-col w-full py-6 text-center items-center justify-center"
+                onClick={() => handleSelect(false)}
+              >
+                <div className="flex flex-1 items-center justify-center mb-1">
+                  <RefreshIcon />
                 </div>
-              </div>
-            </button>
-
-            <button
-              className="flex-col flex-1 py-6 text-center w-full items-center justify-center"
-              onClick={() => handleSelect(true)}
-            >
-              <div className="flex flex-1 justify-center items-center mb-1">
-                <InBoxArrowDownIcon />
-              </div>
-              <div className="flex flex-1 flex-col justify-center items-center">
-                <div className="text-xl">YES</div>
-                <div className="text-xs">({selectedIds.length}/3)</div>
-              </div>
-            </button>
+                <div className="flex flex-1 items-center justify-center">
+                  <div className="text-xl">
+                    NO
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div className="flex-1">
+              <button
+                className="flex-col w-full py-6 text-center items-center justify-center"
+                onClick={() => handleSelect(true)}
+              >
+                <div className="flex flex-1 justify-center items-center mb-1">
+                  <InBoxArrowDownIcon />
+                </div>
+                <div className="flex flex-1 flex-col justify-center items-center">
+                  <div className="text-xl">YES</div>
+                  <div className="text-xs">({selectedIds.length}/3)</div>
+                </div>
+              </button>
+            </div>
           </div>
         </main>
       </div>
