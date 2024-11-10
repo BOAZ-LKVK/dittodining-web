@@ -30,7 +30,7 @@ export const RestaurantInfo = ({ restaurant }: Props) => {
             {restaurant.name}
           </h2>
 
-          <p className="mt-1 text-sm font-semibold text-gray-400 ">
+          <p className="mt-1 text-sm font-semibold text-gray-400">
             {makeDistance(restaurant.distanceInMeters)}
           </p>
         </div>

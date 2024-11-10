@@ -1,9 +1,11 @@
 "use client";
 
 import { makeDayOfWeek, RestaurantRecommendationResult } from "@/api/api";
+import { ClockIcon } from "@/assets/icons/ClockIcon";
+import { UserIcon } from "@/assets/icons/UserIcon";
 import { Header } from "@/components/header";
 import { DEFAULT_LOCATION } from "@/constants";
-import { makeDistance, makePriceRangePerPerson } from "@/domain/restaurant";
+import { makeDistance, makeOpenTimeToday, makePriceRangePerPerson } from "@/domain/restaurant";
 import { useRecommendationResultPage } from "@/hooks/use-recommendation-result-page";
 import Image from "next/image";
 import { useRef, useState } from "react";
@@ -120,8 +122,7 @@ export default function RecommnendationResultPage() {
               className="bg-white text-black p-2 rounded-lg shadow-lg text-center cursor-pointer"
               style={{ whiteSpace: "nowrap" }}
             >
-
-              <p className="text-sm font-semibold">자세히 보기</p>
+              <p className="text-sm font-bold">자세히 보기</p>
             </div>
           </button>
         </CustomOverlayMap>}
@@ -141,7 +142,7 @@ export default function RecommnendationResultPage() {
           <p className="text-lg text-gray-600">원하는 음식점을 찾아가보세요!</p>
         </div>
 
-        <div className="w-full mt-6 flex-1 items-center ">
+        <div className="w-full mt-6 flex-1 items-center">
           <div className="w-full h-full bg-gray-200">
             {isLoading &&
               <div role="status" className="absolute -translate-x-1/2 -translate-y-1/2 top-2/4 left-1/2">
@@ -165,7 +166,7 @@ export default function RecommnendationResultPage() {
         <div className="flex-2 w-full flex mx-auto max-w-md">
           <div
             ref={scrollRef}
-            className="w-full mt-4 px-4 py-4 overflow-x-auto scrollbar-hide whitespace-nowrap cursor-grab bg-[#452800] select-none"
+            className="w-full mt-4 px-2 py-4 overflow-x-auto scrollbar-hide whitespace-nowrap cursor-grab bg-[#452800] select-none"
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
@@ -174,11 +175,12 @@ export default function RecommnendationResultPage() {
             <div className="flex space-x-4">
               {results.map((result, index) => {
                 const { recommendedRestaurant } = result;
+                const { restaurant } = recommendedRestaurant;
 
                 return (
                   <div
                     key={recommendedRestaurant.restaurant.restaurantId}
-                    className="bg-white rounded-lg shadow-lg w-full flex p-2 min-w-96"
+                    className="bg-white rounded-lg shadow-lg flex p-2 w-full min-w-80"
                     onClick={(e) => handleClick(e, index)}
                   >
                     <div>
@@ -190,27 +192,29 @@ export default function RecommnendationResultPage() {
                         className="object-cover rounded-lg select-none"
                       />
                     </div>
-                    <div className="ml-4 overflow-hidden">
-                      <h2 className="text-lg font-bold">{recommendedRestaurant.restaurant.name}</h2>
+                    <div className="ml-1 overflow-hidden">
+                      <h2 className="text-lg font-bold text-secondary">{recommendedRestaurant.restaurant.name}</h2>
                       {/* TOOD: 음식점 설명 데이터 파이프라인 작업 후 추가 */}
                       {/* <p className="text-sm text-orange-600 overflow-hidden text-ellipsis">
                         {recommendedRestaurant.restaurant.description}
                       </p> */}
                       <div className="flex flex-grow">
-                        <div className="text-sm text-gray-600">
-                          {makePriceRangePerPerson(
-                            recommendedRestaurant.restaurant.minimumPricePerPerson,
-                            recommendedRestaurant.restaurant.maximumPricePerPerson
-                          )}
-                        </div>
-                        <div className="ml-1">
-                          {
-                            recommendedRestaurant.restaurant.businessHours.find(
-                              (businessHour) => businessHour.dayOfWeekEnum === makeDayOfWeek(now)
-                            )?.openTime}
+                        <div className="flex-col mt-1 font-semibold text-black">
+                          <div className="mr-1 flex items-center">
+                            <UserIcon />
+                            <span className="ml-1 text-xs">
+                              {makePriceRangePerPerson(restaurant.minimumPricePerPerson, restaurant.maximumPricePerPerson)}
+                            </span>
+                          </div>
+                          <div className="flex items-center">
+                            <ClockIcon />
+                            <span className="ml-1 text-xs">
+                              {makeOpenTimeToday(restaurant.businessHours)}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                      <div className="text-sm font-semibold text-gray-400">
+                      <div className="text-sm font-semibold text-gray-400 mt-2">
                         {makeDistance(recommendedRestaurant.restaurant.distanceInMeters)}
                       </div>
                     </div>
@@ -220,7 +224,7 @@ export default function RecommnendationResultPage() {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </main >
+    </div >
   );
 }
