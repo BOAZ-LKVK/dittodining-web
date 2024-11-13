@@ -16,14 +16,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>
-        <ReactQueryProvider>
-          {children}
-        </ReactQueryProvider>
+      <body className="max-w-md">
         <Script
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_APP_KEY}&libraries=services,clusterer&autoload=false`}
           strategy="beforeInteractive"
         />
+
+        <ReactQueryProvider>
+          {children}
+        </ReactQueryProvider>
       </body>
     </html>
   );
