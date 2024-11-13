@@ -21,7 +21,14 @@ export default function Home() {
     <div className="flex flex-col w-full h-dvh bg-white items-center">
       <Header />
 
-      <main className="flex flex-col flex-grow w-full max-w-md">
+      <div className="text-center px-4 flex-2">
+        <p className="mt-2 text-xl font-semibold text-gray-800 text-secondary">
+          현재 위치를 선택하고 <br />
+          주변 맛집을 찾아보세요!
+        </p>
+      </div>
+
+      <main className="flex flex-col flex-grow w-full max-w-md mt-6 rounded-lg overflow-auto">
         <div className="flex-1 bg-gray-200 w-full">
           <div className="w-full h-full">
             <Map
@@ -43,7 +50,7 @@ export default function Home() {
 
         <div className="flex-2">
           <button
-            className="w-full py-3 bg-orange-600 text-white text-lg rounded-b-lg shadow"
+            className="w-full py-4 bg-orange-600 text-white text-lg rounded-b-lg shadow"
             onClick={onClickStartButton}
           >
             주변 맛집 찾기
