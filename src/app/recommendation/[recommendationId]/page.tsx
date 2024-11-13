@@ -49,14 +49,18 @@ export default function RecommendationDetailPage({ params }: RecommendationDetai
 
   return (
     <div className="flex flex-col h-dvh items-center">
-      <header className="w-full p-4 flex justify-between items-center bg-white">
+
+      <header className="w-full p-5 flex justify-between items-center bg-white cursor-pointer">
         <button onClick={() => router.back()}>
-          <ArrowLeftIcon />
+          <div
+            className="w-10 h-10">
+            <ArrowLeftIcon />
+          </div>
         </button>
       </header>
 
       <main className="flex flex-col flex-grow w-full max-w-md overflow-auto scrollbar-hide">
-        <div className="felx-1 p-4 flex-grow overflow-auto scrollbar-hide">
+        <div className="felx-1 px-8 py-4 flex-grow overflow-auto scrollbar-hide">
           <RestaurantRecommendation restaurantRecommendation={recommendation} />
         </div>
 

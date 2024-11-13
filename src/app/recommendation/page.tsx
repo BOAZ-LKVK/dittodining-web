@@ -24,14 +24,14 @@ export default function RecommendationPage() {
       <div className="flex flex-col items-center h-dvh">
         <Header />
         <main className="flex flex-col w-full max-w-md overflow-auto scrollbar-hide">
-          <div className="px-8 pt-4 flex-grow overflow-auto scrollbar-hide">
+          <div className="px-8 py-4 flex-grow overflow-auto scrollbar-hide">
             <RestaurantRecommendation restaurantRecommendation={currentRestaurantRecommendation} />
           </div>
 
           <div className="w-full flex mx-auto max-w-md bg-secondary h-28 text-white font-bold">
             <div className="flex-1">
               <button
-                className="flex-col w-full py-6 text-center items-center justify-center"
+                className="flex-col w-full h-full py-6 text-center items-center justify-center"
                 onClick={() => handleSelect(false)}
               >
                 <div className="flex flex-1 items-center justify-center mb-1">
@@ -46,7 +46,7 @@ export default function RecommendationPage() {
             </div>
             <div className="flex-1">
               <button
-                className="flex-col w-full py-6 text-center items-center justify-center"
+                className="flex-col w-full h-full py-6 text-center items-center justify-center"
                 onClick={() => handleSelect(true)}
               >
                 <div className="flex flex-1 justify-center items-center mb-1">

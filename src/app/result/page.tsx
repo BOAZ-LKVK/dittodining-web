@@ -1,6 +1,6 @@
 "use client";
 
-import { makeDayOfWeek, RestaurantRecommendationResult } from "@/api/api";
+import { RestaurantRecommendationResult } from "@/api/api";
 import { ClockIcon } from "@/assets/icons/ClockIcon";
 import { UserIcon } from "@/assets/icons/UserIcon";
 import { Header } from "@/components/header";
@@ -187,8 +187,7 @@ export default function RecommnendationResultPage() {
                       <Image
                         src={recommendedRestaurant.restaurant.restaurantImageUrls[0]}
                         alt={'restaurant image'}
-                        objectFit="cover"
-                        layout="fill"
+                        fill
                         className="object-cover rounded-lg select-none"
                       />
                     </div>
