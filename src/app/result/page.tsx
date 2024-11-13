@@ -180,15 +180,15 @@ export default function RecommnendationResultPage() {
                 return (
                   <div
                     key={recommendedRestaurant.restaurant.restaurantId}
-                    className="bg-white rounded-lg shadow-lg flex p-2 w-full min-w-80"
+                    className="flex w-full bg-white rounded-lg shadow-lg min-w-80 pb-6 pt-3 px-2"
                     onClick={(e) => handleClick(e, index)}
                   >
-                    <div>
+                    <div className="relative w-24">
                       <Image
                         src={recommendedRestaurant.restaurant.restaurantImageUrls[0]}
-                        alt={recommendedRestaurant.restaurant.name}
-                        width={100}
-                        height={100}
+                        alt={'restaurant image'}
+                        objectFit="cover"
+                        layout="fill"
                         className="object-cover rounded-lg select-none"
                       />
                     </div>
@@ -214,7 +214,7 @@ export default function RecommnendationResultPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="text-sm font-semibold text-gray-400 mt-2">
+                      <div className="text-xs font-semibold text-gray-400 mt-2">
                         {makeDistance(recommendedRestaurant.restaurant.distanceInMeters)}
                       </div>
                     </div>

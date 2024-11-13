@@ -11,13 +11,14 @@ type Props = {
 export const RestaurantInfo = ({ restaurant }: Props) => {
   return (
     <>
-      <div className="rounded-lg overflow-hidden">
+      <div className="w-full h-80 relative">
         <Image
           src={restaurant.restaurantImageUrls[0]}
-          alt="food"
-          width={400}
-          height={300}
-          className="w-full h-auto object-cover" />
+          alt="restaurant image"
+          objectFit="cover"
+          layout="fill"
+          className="rounded-lg"
+        />
       </div>
 
       <div className="mt-4 text-gray-700">
@@ -30,7 +31,7 @@ export const RestaurantInfo = ({ restaurant }: Props) => {
             {restaurant.name}
           </h2>
 
-          <p className="mt-1 text-sm font-semibold text-gray-400">
+          <p className="mt-1 text-sm font-semibold text-gray-400 ">
             {makeDistance(restaurant.distanceInMeters)}
           </p>
         </div>
