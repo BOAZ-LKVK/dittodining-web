@@ -86,5 +86,4 @@ export const Menus = ({ menus }: Props) => {
       </div>
     </>
   );
-
 };
