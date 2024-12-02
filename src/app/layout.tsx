@@ -14,16 +14,16 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    title: 'Ditto Dining - 최고의 음식점 추천 플랫폼',
+    title: '디토다이닝',
     description:
-      'Ditto Dining은 최고의 음식점과 레스토랑을 추천하는 플랫폼입니다. 지역별 인기 맛집, 리뷰, 메뉴 정보를 한눈에 확인하세요.',
+      '나도 좋아할 음식점 추천 - 디토다이닝',
     url: `${HOST}`,
     images: [
       {
         url: `${HOST}/logo.png`,
         width: 400,
         height: 400,
-        alt: 'Ditto Dining Preview Image',
+        alt: '디토다이닝 이미지',
       },
     ],
   },
