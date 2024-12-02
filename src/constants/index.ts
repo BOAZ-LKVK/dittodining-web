@@ -4,3 +4,5 @@ export const DEFAULT_LOCATION = {
   latitude: 37.496486063,
   longitude: 127.028361548,
 };
+
+export const HOST = "https://dittodining.com";
