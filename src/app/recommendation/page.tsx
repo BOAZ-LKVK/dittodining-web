@@ -5,10 +5,19 @@ import { RefreshIcon } from "@/assets/icons/RefreshIcon";
 import { Header } from "@/components/header";
 import { RestaurantRecommendation } from "@/components/recommendation/recommendation";
 import { useRestaurantRecommendationPage } from "@/hooks/use-restaurant-recommendation-page";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function RecommendationPage() {
-  const { currentRestaurant, currentRestaurantRecommendation, selectedIds, handleSelect, review, menus, isLoading } =
+  const { currentRestaurantRecommendation, recommendedRestaurants, selectedIds, handleSelect, isLoading } =
     useRestaurantRecommendationPage();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && recommendedRestaurants?.length === 0) {
+      router.push("/result");
+    }
+  }, [isLoading, recommendedRestaurants, router]);
 
   if (isLoading) {
     return <div>Loading...</div>;

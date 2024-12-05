@@ -62,6 +62,7 @@ export const requestRestaurantRecommendation = async (
 
 export type ListRecommendedRestaurantsRequest = {
   limit?: number;
+  cursorRestaurantRecommendationId?: number;
 };
 
 export type ListRecommendedRestaurantsResponse = {

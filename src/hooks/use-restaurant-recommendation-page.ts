@@ -16,8 +16,17 @@ export const useRestaurantRecommendationPage = () => {
     useState<RecommendedRestaurant>();
   const { restaurantRecommendationRequestId, isLoading: isRequestIdLoading } =
     useRestaurantRecommendationRequestId();
+  const [
+    cursorRestaurantRecommendationId,
+    setCursorRestaurantRecommendationId,
+  ] = useState<number | undefined>(undefined);
 
   const router = useRouter();
+
+  const listRecommendedRestaurantsRequest = {
+    limit: 10,
+    cursorRestaurantRecommendationId: cursorRestaurantRecommendationId,
+  };
 
   const {
     data: listRecommendedRestaurantsData,
@@ -28,11 +37,13 @@ export const useRestaurantRecommendationPage = () => {
       API_PATH.LIST_RECOMMENDED_RESTAURANTS(
         restaurantRecommendationRequestId!!
       ),
+      listRecommendedRestaurantsRequest,
     ],
     queryFn: () =>
-      listRecommendedRestaurants(restaurantRecommendationRequestId!!, {
-        limit: 10,
-      }),
+      listRecommendedRestaurants(
+        restaurantRecommendationRequestId!!,
+        listRecommendedRestaurantsRequest
+      ),
     enabled: !!restaurantRecommendationRequestId,
   });
 
@@ -78,8 +89,10 @@ export const useRestaurantRecommendationPage = () => {
       currentIndex ===
       listRecommendedRestaurantsData.recommendedRestaurants.length - 1
     ) {
-      // TODO: 마지막 음식점 추천인 경우 데이터를 좀 더 조회하기
-      // TODO: 더 이상 추천 데이터가 없는 경우 처리하기
+      setCursorRestaurantRecommendationId(
+        currentRestaurantRecommendation?.restaurant.restaurantRecommendationId
+      );
+
       return undefined;
     }
 
@@ -124,8 +137,10 @@ export const useRestaurantRecommendationPage = () => {
   };
 
   return {
-    currentRestaurantRecommendation:currentRestaurantRecommendation,
+    currentRestaurantRecommendation: currentRestaurantRecommendation,
     currentRestaurant: currentRestaurant,
+    recommendedRestaurants:
+      listRecommendedRestaurantsData.recommendedRestaurants,
     selectedIds: selectedIds,
     handleSelect: handleSelect,
     review: review,

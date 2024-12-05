@@ -44,8 +44,7 @@ export const useRecommendationResultPage = () => {
     }
   };
 
-  const isLoading =
-    isRequestIdLoading || isQueryLoading || selectedResult === undefined;
+  const isLoading = isRequestIdLoading || isQueryLoading;
 
   if (isLoading || isError) {
     return {

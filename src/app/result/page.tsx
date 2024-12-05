@@ -8,6 +8,7 @@ import { DEFAULT_LOCATION } from "@/constants";
 import { makeDistance, makeOpenTimeToday, makePriceRangePerPerson } from "@/domain/restaurant";
 import { useRecommendationResultPage } from "@/hooks/use-recommendation-result-page";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { CustomOverlayMap, Map, MapMarker } from "react-kakao-maps-sdk";
 
@@ -17,6 +18,7 @@ export default function RecommnendationResultPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const router = useRouter();
   const now = new Date();
 
   if (isLoading) {
@@ -26,6 +28,36 @@ export default function RecommnendationResultPage() {
   if (isError) {
     return <div>오류가 발생했습니다. 잠시후 다시 시도해주세요.</div>;
   }
+
+  if (results.length === 0) {
+    return (
+      <div className="flex flex-col w-full bg-white h-dvh items-center">
+        <Header />
+        <main className="w-full max-w-md mt-4 flex flex-col h-full">
+          <div className="text-center px-4 flex-2">
+            <p className="mt-2 text-xl font-semibold text-gray-800 text-secondary">
+              더 이상 추천할 음식점이 없어요! 😥
+
+            </p>
+            <div className="mt-2"></div>
+            <p className="text-lg text-gray-600">
+              메인 화면으로 돌아가서 <br />
+              다시 한 번 마음에 드는 음식점을 찾아볼까요?</p>
+          </div>
+
+          <div className="mt-6"></div>
+
+          <button
+            onClick={() => router.push("/")}
+            className="bg-secondary text-white px-6 py-3 rounded-lg font-bold hover:bg-secondary-dark"
+          >
+            메인으로 돌아가기
+          </button>
+        </main>
+      </div>
+    );
+  }
+
 
 
   const handleMouseDown = (e: React.MouseEvent) => {
