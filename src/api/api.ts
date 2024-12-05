@@ -47,6 +47,7 @@ export type RequestRestaurantRecommendationRequest = {
 
 export type RequestRestaurantRecommendationResponse = {
   restaurantRecommendationRequestId: number;
+  isAvailableLocation: boolean;
 };
 
 export const requestRestaurantRecommendation = async (

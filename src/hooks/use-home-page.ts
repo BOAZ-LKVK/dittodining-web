@@ -10,6 +10,7 @@ export const useHomePage = () => {
     latitude: number;
     longitude: number;
   }>(DEFAULT_LOCATION);
+  const [isAvailableLocation, setIsAvailableLocation] = useState(true);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -32,13 +33,19 @@ export const useHomePage = () => {
 
   // TODO: hooks로 refactoring
   const onClickStartButton = async () => {
-    const { restaurantRecommendationRequestId } =
+    const { restaurantRecommendationRequestId, isAvailableLocation } =
       await requestRestaurantRecommendation({
         userLocation: {
           latitude: userLocation.latitude,
           longitude: userLocation.longitude,
         },
       });
+
+    setIsAvailableLocation(isAvailableLocation);
+
+    if (!isAvailableLocation) {
+      return;
+    }
 
     updateRestaurantRecommendationRequestId(restaurantRecommendationRequestId);
     sessionStorage.removeItem(SESSION_STORAGE_KEY.selectedRestaurantIds);
@@ -49,6 +56,8 @@ export const useHomePage = () => {
 
   return {
     onClickStartButton,
+    isAvailableLocation,
+    setIsAvailableLocation,
     userLocation,
     setUserLocation,
     isLoading,
